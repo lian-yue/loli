@@ -1,0 +1,16 @@
+{
+    "name": "loli/full",
+    "description": "The Loli Framework Full.",
+    "keywords": ["framework", "loli"],
+    "license": "Apache2",
+    "type": "project",
+    "authors": [
+        {
+            "name": "Lian Yue",
+            "email": "admin@lianyue.org"
+        }
+    ],
+    "require": {
+        "loli/base": "dev-master"
+    }
+}

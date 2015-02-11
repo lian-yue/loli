@@ -1,0 +1,70 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "This file is @generated automatically"
+    ],
+    "hash": "4f7ce32f2b132cc05d42997163b5ddfa",
+    "packages": [
+        {
+            "name": "loli/base",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/lian-yue/loli-base.git",
+                "reference": "a38abadcc9790dbd3cade15e4e0b1f92dc374c68"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/lian-yue/loli-base/zipball/a38abadcc9790dbd3cade15e4e0b1f92dc374c68",
+                "reference": "a38abadcc9790dbd3cade15e4e0b1f92dc374c68",
+                "shasum": ""
+            },
+            "require": {
+                "ext-mbstring": "*",
+                "ext-mcrypt": "*",
+                "ext-openssl": "*",
+                "php": ">=5.4.0"
+            },
+            "replace": {
+                "loli": "self.version"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "src/functions.php",
+                    "src/include.php"
+                ],
+                "psr-4": {
+                    "Loli\\": "src/Loli/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache2"
+            ],
+            "authors": [
+                {
+                    "name": "Lian Yue",
+                    "email": "admin@lianyue.org"
+                }
+            ],
+            "description": "The Loli Framework Base.",
+            "keywords": [
+                "framework",
+                "loli"
+            ],
+            "time": "2015-02-04 17:17:07"
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "stable",
+    "stability-flags": {
+        "loli/base": 20
+    },
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": [],
+    "platform-dev": []
+}
