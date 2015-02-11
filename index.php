@@ -20,7 +20,7 @@ require __DIR__ . '/vendor/autoload.php';
 
 
 
-
+print_r($_SERVER);die;
 /*
 
 
