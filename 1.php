@@ -27,15 +27,9 @@ echo $curl->get();
 <form action="/" method="post"  enctype="multipart/form-data">
     <input type="text" name="username" value="yyy"/><br/>
     <input type="text" name="age" value="zzz"/><br/>
-    <input type="file" name="q[qqq][qqq][eee]" /><br/>
-    <input type="file" name="q[www][wwww][www]" /><br/>
-    <input type="file" name="q[www][qqqq]" /><br/>
-    <input type="file" name="q[name]" /><br/>
-    <input type="file" name="w" /><br/>
-    <input type="file" name="e" /><br/>
-    <input type="file" name="qq" /><br/>
-    <input type="file" name="ww" /><br/>
-    <input type="file" name="ee" /><br/>
+    <input type="file" name="q[][]" /><br/>
+    <input type="file" name="q[][]" /><br/>
+    <input type="file" name="q[][]" /><br/>
     <input type="submit" /><br/>
 </form>
 

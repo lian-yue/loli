@@ -18,13 +18,14 @@ if (!empty($_SERVER['REQUEST_URI']) && in_array(strtolower($_SERVER['REQUEST_URI
 }
 require __DIR__ . '/vendor/autoload.php';
 
-print_r($_FILES);die;
 new Request;
+print_r($_SERVER);die;
 
 print_r(Request::defaultURL());
 print_r(Request::defaultHeaders());
 print_r(Request::defaultFiles());
 print_r(Request::defaultContent());
+print_r(new Request('GET', 'http://www.qq.com'));
 echo "\n\n\n";
 print_r(load_ram());
 die;
