@@ -30,6 +30,7 @@ print_r(load_ram());
 die;
 //echo load_ram();
 
+<<<<<<< HEAD
 /*
   if (!isset($_SERVER['PHP_AUTH_USER'])) {
     header('WWW-Authenticate: Basic realm="My Realm"');
@@ -61,6 +62,9 @@ header_register_callback(function(){
 //print_r($_SERVER);
 
 //header_remove();
+=======
+print_r($_SERVER);die;
+>>>>>>> 0f811f47d27ae7a22c6a44e8adc6c839524a59af
 /*
 
 
