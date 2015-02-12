@@ -8,7 +8,7 @@
 /*	Author: Moon
 /*
 /*	Created: UTC 2015-01-03 10:27:12
-/*	Updated: UTC 2015-02-12 06:39:53
+/*	Updated: UTC 2015-02-12 07:17:38
 /*
 /* ************************************************************************** */
 namespace Loli;
@@ -30,7 +30,6 @@ print_r(load_ram());
 die;
 //echo load_ram();
 
-<<<<<<< HEAD
 /*
   if (!isset($_SERVER['PHP_AUTH_USER'])) {
     header('WWW-Authenticate: Basic realm="My Realm"');
