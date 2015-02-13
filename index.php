@@ -32,7 +32,7 @@ print_r(Request::defaultURL());
 print_r(Request::defaultHeaders());
 print_r(Request::defaultFiles());
 print_r(Request::defaultContent());
-print_r(new Request('GET', 'http://www.qq.com'));*/
+print_r(new Request('GET', 'http://www.qq.com'));
 >>>>>>> 9cb784031a1e1feadcbbea5404c12e37f2de1fca
 echo "\n\n\n";
 print_r(load_time());
