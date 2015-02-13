@@ -8,7 +8,7 @@
 /*	Author: Moon
 /*
 /*	Created: UTC 2015-01-03 10:27:12
-/*	Updated: UTC 2015-02-12 07:17:38
+/*	Updated: UTC 2015-02-12 14:39:14
 /*
 /* ************************************************************************** */
 namespace Loli;
@@ -24,7 +24,19 @@ setcookie(mb_rand(mt_rand(1, 20), '   """"""""[][][][][][][]'), mb_rand(rand(1,2
 //new Request;
 
 print_r(new Request('GET', '/qe/1s/adas/d/we'));
+=======
+new Request;
+print_r($_SERVER);
+/*
+print_r(Request::defaultURL());
+print_r(Request::defaultHeaders());
+print_r(Request::defaultFiles());
+print_r(Request::defaultContent());
+print_r(new Request('GET', 'http://www.qq.com'));*/
+>>>>>>> 9cb784031a1e1feadcbbea5404c12e37f2de1fca
 echo "\n\n\n";
+print_r(load_time());
+print_r(load_file());
 print_r(load_ram());
 die;
 
