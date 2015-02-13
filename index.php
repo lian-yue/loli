@@ -8,7 +8,7 @@
 /*	Author: Moon
 /*
 /*	Created: UTC 2015-01-03 10:27:12
-/*	Updated: UTC 2015-02-12 07:17:38
+/*	Updated: UTC 2015-02-12 14:39:14
 /*
 /* ************************************************************************** */
 namespace Loli;
@@ -18,15 +18,18 @@ if (!empty($_SERVER['REQUEST_URI']) && in_array(strtolower($_SERVER['REQUEST_URI
 }
 require __DIR__ . '/vendor/autoload.php';
 
-new Request;
-print_r($_SERVER);die;
 
+new Request;
+print_r($_SERVER);
+/*
 print_r(Request::defaultURL());
 print_r(Request::defaultHeaders());
 print_r(Request::defaultFiles());
 print_r(Request::defaultContent());
-print_r(new Request('GET', 'http://www.qq.com'));
+print_r(new Request('GET', 'http://www.qq.com'));*/
 echo "\n\n\n";
+print_r(load_time());
+print_r(load_file());
 print_r(load_ram());
 die;
 //echo load_ram();
