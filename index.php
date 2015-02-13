@@ -24,8 +24,9 @@ setcookie(mb_rand(mt_rand(1, 20), '   """"""""[][][][][][][]'), mb_rand(rand(1,2
 //new Request;
 
 print_r(new Request('GET', '/qe/1s/adas/d/we'));
-=======
-new Request;
+
+
+/*new Request;
 print_r($_SERVER);
 /*
 print_r(Request::defaultURL());
