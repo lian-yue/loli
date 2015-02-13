@@ -18,17 +18,17 @@ if (!empty($_SERVER['REQUEST_URI']) && in_array(strtolower($_SERVER['REQUEST_URI
 }
 require __DIR__ . '/vendor/autoload.php';
 
-new Request;
-print_r($_SERVER);die;
 
-print_r(Request::defaultURL());
-print_r(Request::defaultHeaders());
-print_r(Request::defaultFiles());
-print_r(Request::defaultContent());
-print_r(new Request('GET', 'http://www.qq.com'));
+
+setcookie(mb_rand(mt_rand(1, 20), '   """"""""[][][][][][][]'), mb_rand(rand(1,20), '12345678==========-------======;;;;;;;=====----------90-qwertyuioasdfghjklz;;;;[][][][][][][]./.,./<>?<":L{PO>?,{Pl":l./,?>,xcvbnmQWER""""""""""""""""""""""\'\'\'\'\'\'\'\'\'\'\'\'\'ZXCVBNMjkheh大家完全恶化委屈都会饿花花世界和v玩儿过i哦了i为u了看说得好sd'), time() + 11111, '/');
+//new Request;
+
+print_r(new Request('GET', '/qe/1s/adas/d/we'));
 echo "\n\n\n";
 print_r(load_ram());
 die;
+
+//=,; \t\r\n\013\014
 //echo load_ram();
 
 /*
