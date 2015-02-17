@@ -19,7 +19,8 @@ if (!empty($_SERVER['REQUEST_URI']) && in_array(strtolower($_SERVER['REQUEST_URI
 require __DIR__ . '/vendor/autoload.php';
 
 
-
+print_r($_SERVER);
+die;
 //setcookie(mb_rand(mt_rand(1, 20), '   """"""""[][][][][][][]'), mb_rand(rand(1,20), '12345678==========-------======;;;;;;;=====----------90-qwertyuioasdfghjklz;;;;[][][][][][][]./.,./<>?<":L{PO>?,{Pl":l./,?1>,xcvbnmQWER""""""""""""""""""""""\'\'\'\'\'\'\'\'\'\'\'\'\'ZXCVBNMjkheh大家完全恶化委屈都会饿花花世界和v玩儿过i哦了i为u了看说得好sd'), time() + 11111, '/');
 //new Request;
 
