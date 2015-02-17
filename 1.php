@@ -24,7 +24,7 @@ echo $curl->get();
 </form>
 
 
-<form action="/" method="post"  enctype="multipart/form-data">
+<form action="/" method="post"  enctype="MULTIPART/form-data">
     <input type="text" name="username" value="yyy"/><br/>
     <input type="text" name="age" value="zzz"/><br/>
     <input type="file" name="q[][]" /><br/>
@@ -132,7 +132,7 @@ $content = implode( "\n\n", $content );
 /*	Author: Moon
 /*
 /*	Created: UTC 2015-02-09 06:33:20
-/*	Updated: UTC 2015-02-12 12:11:34
+/*	Updated: UTC 2015-02-15 14:32:22
 /*
 /* ************************************************************************** */
 /*

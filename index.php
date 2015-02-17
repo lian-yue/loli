@@ -8,7 +8,7 @@
 /*	Author: Moon
 /*
 /*	Created: UTC 2015-01-03 10:27:12
-/*	Updated: UTC 2015-02-14 11:32:03
+/*	Updated: UTC 2015-02-15 15:06:46
 /*
 /* ************************************************************************** */
 namespace Loli;
@@ -24,7 +24,11 @@ require __DIR__ . '/vendor/autoload.php';
 //new Request;
 
 print_r(new Request('GET', '/qe/1s/adas/d/we'));
-
+echo "\n\n\n";
+echo load_time() ."\n";
+echo load_file() ."\n";
+echo load_ram() ."\n";
+die;
 
 /*new Request;
 print_r($_SERVER);

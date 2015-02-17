@@ -8,7 +8,7 @@
 /*	Author: Moon
 /*
 /*	Created: UTC 2015-02-14 14:09:58
-/*	Updated: UTC 2015-02-14 15:31:28
+/*	Updated: UTC 2015-02-15 13:51:48
 /*
 /* ************************************************************************** */
 namespace Loli;
@@ -38,8 +38,7 @@ $curl = new Curl([
 
 
 
-
-//17325
+//131072
 $echo = '';
 $code = r('code');
 
@@ -65,7 +64,7 @@ do {
 			print_r($json);
 			die;
 		}
-		if ($json->errInfo->no == '200002' || $json->errInfo->no == '230049' || $json->errInfo->no == '230054' || $json->errInfo->no == '230048') {
+		if ($json->errInfo->no == '200002' || $json->errInfo->no == '230049'|| $json->errInfo->no == '230053' || $json->errInfo->no == '230054' || $json->errInfo->no == '230048'|| $json->errInfo->no == '400001') {
 			continue;
 		}
 
