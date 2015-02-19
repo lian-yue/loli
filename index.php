@@ -8,7 +8,7 @@
 /*	Author: Moon
 /*
 /*	Created: UTC 2015-01-03 10:27:12
-/*	Updated: UTC 2015-02-17 09:38:08
+/*	Updated: UTC 2015-02-18 10:04:06
 /*
 /* ************************************************************************** */
 namespace Loli;
@@ -17,14 +17,9 @@ if (!empty($_SERVER['REQUEST_URI']) && in_array(strtolower($_SERVER['REQUEST_URI
 	exit;
 }
 require __DIR__ . '/vendor/autoload.php';
-
-
+/*
+print_r((new Request('GET', '/qe/1s/adas/d/we'))->setScheme('https'));
 print_r($_SERVER);
-die;
-//setcookie(mb_rand(mt_rand(1, 20), '   """"""""[][][][][][][]'), mb_rand(rand(1,20), '12345678==========-------======;;;;;;;=====----------90-qwertyuioasdfghjklz;;;;[][][][][][][]./.,./<>?<":L{PO>?,{Pl":l./,?1>,xcvbnmQWER""""""""""""""""""""""\'\'\'\'\'\'\'\'\'\'\'\'\'ZXCVBNMjkheh大家完全恶化委屈都会饿花花世界和v玩儿过i哦了i为u了看说得好sd'), time() + 11111, '/');
-//new Request;
-
-print_r(new Request('GET', '/qe/1s/adas/d/we'));
 echo "\n\n\n";
 echo load_time() ."\n";
 echo load_file() ."\n";
@@ -32,7 +27,7 @@ echo load_ram() ."\n";
 die;
 
 print_r();
-
+*/
 /*new Request;
 print_r($_SERVER);
 /*
