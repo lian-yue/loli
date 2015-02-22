@@ -8,7 +8,7 @@
 /*	Author: Moon
 /*
 /*	Created: UTC 2015-01-03 10:27:12
-/*	Updated: UTC 2015-02-19 08:41:04
+/*	Updated: UTC 2015-02-20 14:55:53
 /*
 /* ************************************************************************** */
 namespace Loli;
@@ -18,8 +18,27 @@ if (!empty($_SERVER['REQUEST_URI']) && in_array(strtolower($_SERVER['REQUEST_URI
 }
 require __DIR__ . '/vendor/autoload.php';
 
-print_r((new Request('GET', '/qe/1s/adas/d/we'))->setScheme('https'));
-print_r($_SERVER);
+$request = new Request('GET');
+
+Router::add('User/');
+
+new Router($request, $response);
+$response->send();
+
+
+
+
+
+
+
+
+
+
+
+echo load_time() ."\n";
+echo load_file() ."\n";
+echo load_ram() ."\n";
+//echo $URL;
 
 /*
 print_r((new Request('GET', '/qe/1s/adas/d/we'))->setScheme('https'));
