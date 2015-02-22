@@ -16,7 +16,17 @@ namespace Loli;
 if (!empty($_SERVER['REQUEST_URI']) && in_array(strtolower($_SERVER['REQUEST_URI']), ['/favicon.ico', '/crossdomain.xml', '/robots.txt'])) {
 	exit;
 }
+
+$_SERVER['LOLI']['DEBUG'] = [
+	'is' => true,
+	'display' => E_ALL,
+];
+
+
 require __DIR__ . '/vendor/autoload.php';
+require __DIR__ . '/Login.php';
+
+
 
 $request = new Request('GET');
 
@@ -24,13 +34,6 @@ Router::add('User/');
 
 new Router($request, $response);
 $response->send();
-
-
-
-
-
-
-
 
 
 
