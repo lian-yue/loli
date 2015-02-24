@@ -8,7 +8,7 @@
 /*	Author: Moon
 /*
 /*	Created: UTC 2015-01-03 10:27:12
-/*	Updated: UTC 2015-02-20 14:55:53
+/*	Updated: UTC 2015-02-24 05:47:24
 /*
 /* ************************************************************************** */
 namespace Loli;
@@ -20,6 +20,11 @@ if (!empty($_SERVER['REQUEST_URI']) && in_array(strtolower($_SERVER['REQUEST_URI
 $_SERVER['LOLI']['DEBUG'] = [
 	'is' => true,
 	'display' => E_ALL,
+];
+
+
+$_SERVER['LOLI']['VIEW'] = [
+	'dir' => __DIR__ . '/views',
 ];
 
 
@@ -36,8 +41,7 @@ new Router($request, $response);
 $response->send();
 
 
-
-
+/*
 echo load_time() ."\n";
 echo load_file() ."\n";
 echo load_ram() ."\n";
