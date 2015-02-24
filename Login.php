@@ -12,7 +12,7 @@
 /*
 /* ************************************************************************** */
 namespace Controller\User;
-use Loli\HMVC\Controller, Loli\Request, Loli\Response, Loli\HMVC\Message;
+use Loli\HMVC\Controller, Loli\Request, Loli\Response, Loli\HMVC\Error;
 
 class Login extends Controller{
 

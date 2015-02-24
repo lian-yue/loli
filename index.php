@@ -32,7 +32,6 @@ require __DIR__ . '/vendor/autoload.php';
 require __DIR__ . '/Login.php';
 
 
-
 $request = new Request('GET');
 
 Router::add('User/');

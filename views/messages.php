@@ -1,5 +1,5 @@
 <?php
-use Loli\HMVC\Error;
+use Loli\HMVC\Message;
 /* ************************************************************************** */
 /*
 /*	Lian Yue
@@ -17,7 +17,7 @@ use Loli\HMVC\Error;
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 		<?php if ($refresh >= 0 && is_string($redirect)): ?>
-		<meta http-equiv="refresh" content="{$refresh};URL={$redirect}" />
+		<meta http-equiv="refresh" content="<?php echo $refresh; ?>;URL=<?php echo $redirect; ?>" />
 		<?php endif; ?>
 		<meta name="robots" content="none" />
 		<meta name="viewport" content="width=device-width"/>
@@ -28,8 +28,8 @@ use Loli\HMVC\Error;
 			body,input,button,select,textarea{font: medium/1.8em Tahoma,Helvetica,arial,sans-serif;color:#333;}
 			body{background:#fff;width: 80%;max-width: 800px;margin: 10% auto 0 auto;border: 1px solid #dfdfdf;padding-bottom: 1.4em;}
 			#title{font-size: larger;padding:.6em 1em;border-bottom: 1px solid #dfdfdf;font-weight: bold;}
-			#errors{padding: 1.4em 1.4em 0 1.4em;}
-			#errors .error{padding-bottom: .4em;}
+			#messages{padding: 1.4em 1.4em 0 1.4em;}
+			#messages .message{padding-bottom: .4em;}
 			#redirect{padding: .4em 1.4em 0 1.4em;}
 			#redirect a{cursor: pointer;color: #369;}
 			@media only screen and (max-width : 800px) {
@@ -48,14 +48,14 @@ use Loli\HMVC\Error;
 	</head>
 	<body>
 		<div id="title"><?php echo $title; ?></div>
-		<div id="errors">
-			<?php foreach($errors as $error): ?>
-			<div class="error" code="<?php echo htmlspecialchars($error['code'], ENT_QUOTES) ?>"><?php echo $error['message']; ?></div>
+		<div id="messages">
+			<?php foreach($messages as $message): ?>
+			<div class="message" code="<?php echo htmlspecialchars($message['code'], ENT_QUOTES) ?>"><?php echo $message['message']; ?></div>
 			<?php endforeach; ?>
 		</div>
 		<?php if ($redirect): ?>
 			<div id="redirect">
-				<a href="<?php echo $redirect === true ? 'javascript:history.back()' : $redirect; ?>"><?php echo Error::lang(['Automatic return after $1 seconds', '<strong id="refresh">'. $refresh .'</strong>']) ?></a>
+				<a href="<?php echo $redirect === true ? 'javascript:history.back()' : $redirect; ?>"><?php echo Message::lang(['Automatic return after $1 seconds', '<strong id="refresh">'. $refresh .'</strong>']) ?></a>
 			</div>
 		<?php endif; ?>
 	</body>
