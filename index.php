@@ -8,7 +8,7 @@
 /*	Author: Moon
 /*
 /*	Created: UTC 2015-01-03 10:27:12
-/*	Updated: UTC 2015-02-25 05:02:40
+/*	Updated: UTC 2015-02-25 06:49:28
 /*
 /* ************************************************************************** */
 namespace Loli;
@@ -33,9 +33,9 @@ require __DIR__ . '/Login.php';
 
 
 $request = new Request();
-new Router($request, $response);
+$router = new Router($request, $response);
 $response->send();
-
+unset($router);
 
 /*
 echo load_time() ."\n";

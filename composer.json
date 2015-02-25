@@ -11,14 +11,12 @@
         }
     ],
     "require": {
-        "loli/base": "dev-master"
+        "loli/base": "*"
     },
      "autoload": {
-        "files": [
-            "config.php"
-        ],
         "psr-4": {
-            "Model\\": "models/"
+            "Model\\": "models/",
+            "Controller\\": "controllers/"
         }
     }
 }
