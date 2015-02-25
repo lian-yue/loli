@@ -8,7 +8,7 @@
 /*	Author: Moon
 /*
 /*	Created: UTC 2015-01-03 10:27:12
-/*	Updated: UTC 2015-02-25 07:05:31
+/*	Updated: UTC 2015-02-25 14:22:09
 /*
 /* ************************************************************************** */
 namespace Loli;
@@ -16,16 +16,6 @@ namespace Loli;
 if (!empty($_SERVER['REQUEST_URI']) && in_array(strtolower($_SERVER['REQUEST_URI']), ['/favicon.ico', '/crossdomain.xml', '/robots.txt'])) {
 	exit;
 }
-
-$_SERVER['LOLI']['DEBUG'] = [
-	'is' => true,
-	'display' => E_ALL,
-];
-
-
-$_SERVER['LOLI']['VIEW'] = [
-	'dir' => __DIR__ . '/views',
-];
 
 require __DIR__ . '/config.php';
 require __DIR__ . '/vendor/autoload.php';
