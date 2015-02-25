@@ -13,4 +13,12 @@
     "require": {
         "loli/base": "dev-master"
     }
+     "autoload": {
+        "files": [
+            "config.php",
+        ],
+        "psr-4": {
+            "Model\\": "models/"
+        }
+    },
 }

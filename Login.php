@@ -8,15 +8,8 @@
 /*	Author: Moon
 /*
 /*	Created: UTC 2015-02-22 12:18:59
-/*	Updated: UTC 2015-02-23 15:46:38
+/*	Updated: UTC 2015-02-24 14:41:18
 /*
 /* ************************************************************************** */
 namespace Controller\User;
 use Loli\HMVC\Controller, Loli\Request, Loli\Response, Loli\HMVC\Error;
-
-class Login extends Controller{
-
-	// 默认
-	public function __construct(Request &$request, Response &$response) {
-	}
-}

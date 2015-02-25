@@ -8,7 +8,7 @@
 /*	Author: Moon
 /*
 /*	Created: UTC 2015-01-03 10:27:12
-/*	Updated: UTC 2015-02-24 05:47:24
+/*	Updated: UTC 2015-02-25 05:02:40
 /*
 /* ************************************************************************** */
 namespace Loli;
@@ -27,15 +27,12 @@ $_SERVER['LOLI']['VIEW'] = [
 	'dir' => __DIR__ . '/views',
 ];
 
-
+require __DIR__ . '/config.php';
 require __DIR__ . '/vendor/autoload.php';
 require __DIR__ . '/Login.php';
 
 
-$request = new Request('GET');
-
-Router::add('User/');
-
+$request = new Request();
 new Router($request, $response);
 $response->send();
 
