@@ -8,7 +8,7 @@
 /*	Author: Moon
 /*
 /*	Created: UTC 2015-01-03 10:27:12
-/*	Updated: UTC 2015-02-25 14:22:09
+/*	Updated: UTC 2015-02-28 11:53:08
 /*
 /* ************************************************************************** */
 namespace Loli;
@@ -21,6 +21,22 @@ require __DIR__ . '/config.php';
 require __DIR__ . '/vendor/autoload.php';
 
 
+$mongo = new DB\Mongo([
+	'explain' => true,
+	//'user' => 'root',
+	//'pass' => '874654621',
+	'name' => 'wordpress1',
+]);
+
+$mongo->truncate('test');
+$mongo->insert(['insert' => 'test', 'ordered' => true, 'documents' => [['_id' => '54f1a0c8010584c01b040021', 'qqq' => 'eee'], ['_id' => '54f1a0c8010584c01b04002c', 'qqq' => 'ewqeee'], ['qqq' => 'qqq']]]);
+
+print_r($mongo->results(['collection' => 'test', 'query' => []]));
+/*
+foreach($mongo->insert() as $value) {
+	$mongo->drop($value);
+}
+/*
 $request = new Request();
 $router = new Router($request, $response);
 $response->send();
