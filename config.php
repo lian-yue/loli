@@ -26,4 +26,8 @@ $_SERVER['LOLI'] = [
 		'type' => 'File',
 		'path' => __DIR__ . '/data/log/$date/$level-$time.log',
 	],
+	'CACHE' => [
+		'type' => 'Memcache',
+		'args' => ['127.0.0.1:11211'],
+	],
 ];

@@ -17,7 +17,7 @@ use Loli\HMVC\Error;
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 		<?php if ($refresh >= 0 && is_string($redirect)): ?>
-		<meta http-equiv="refresh" content="{$refresh};URL={$redirect}" />
+		<meta http-equiv="refresh" content="<?php echo $refresh; ?>;URL=<?php echo $redirect; ?>" />
 		<?php endif; ?>
 		<meta name="robots" content="none" />
 		<meta name="viewport" content="width=device-width"/>

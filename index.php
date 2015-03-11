@@ -8,7 +8,7 @@
 /*	Author: Moon
 /*
 /*	Created: UTC 2015-01-03 10:27:12
-/*	Updated: UTC 2015-02-28 11:53:08
+/*	Updated: UTC 2015-03-09 14:54:00
 /*
 /* ************************************************************************** */
 namespace Loli;
@@ -17,25 +17,109 @@ if (!empty($_SERVER['REQUEST_URI']) && in_array(strtolower($_SERVER['REQUEST_URI
 	exit;
 }
 
+
+
+
+
+
 require __DIR__ . '/config.php';
 require __DIR__ . '/vendor/autoload.php';
 
+//$qq = new DB\PDO([['protocol' => 'mysql', 'hostname' => 'localhost:3306', 'username' => 'root', 'password' => '874654621', 'database' => 'loli']]);
+$qq = new DB\PDO([['protocol' => 'sqlite', 'database' => __DIR__ . '/data/DatabaseName.db']]);
+
+print_r($tables = $qq->tables());
+//print_r($qq->drop(reset($tables)));
+//print_r($qq->create('testtable', 'CREATE TABLE  :table (id integer,name varchar(255));'));
+
+
+
+
+
+
+
+
+
+
+/*
+
+print_r(\PDO::getAvailableDrivers());
+die;
+
+
+$qq = new \MongoId;
+print_r($qq);die;
+$subject = 'SELECT column tabl FROM SQL_CALC_FOUND_ROWS  FROM  table
+WHERE column operator value';
+echo preg_match('/^\s*SELECT\s+(?:(?!\s+FROM\s+).)+SQL_CALC_FOUND_ROWS/i', $subject, $matches);
+
+print_r($matches);die;
+for ($i = 0; $i < 100000; ++$i) {
+	//(object) ['column' => 'qq', 'value' => 'ee', 'options' => []];
+	//$query[] = (object) ['column' => 'qq', 'value' => 'ee', 'options' => []];
+	//new Query\Query('qqq', 'eee') instanceof Query\Query;
+	//$query[] = new Query\Query('qqq', 'eee');
+}
+echo load_ram() . "<br>";
+echo load_time() * 1000;
+//die;
+
+
+
+echo Cache::add('qwe', 'qwe', 'asd', 60);
+echo Cache::get('qwe', 'asd');
+echo Cache::set('qwe', 'qwe', 'asd', 60);
 
 $mongo = new DB\Mongo([
-	'explain' => true,
-	//'user' => 'root',
-	//'pass' => '874654621',
-	'name' => 'wordpress1',
+'host' => '127.0.0.1',
+'name' => 'loli',
 ]);
 
-$mongo->truncate('test');
-$mongo->insert(['insert' => 'test', 'ordered' => true, 'documents' => [['_id' => '54f1a0c8010584c01b040021', 'qqq' => 'eee'], ['_id' => '54f1a0c8010584c01b04002c', 'qqq' => 'ewqeee'], ['qqq' => 'qqq']]]);
 
-print_r($mongo->results(['collection' => 'test', 'query' => []]));
-/*
-foreach($mongo->insert() as $value) {
+
+
+foreach($mongo->tables() as $value) {
+  $mongo->drop($value);
+}
+
+$mongo->create(['create' => 'test', 'indexes' => [[
+        'key' => [
+            'item' => true,
+            'supplier' => true,
+            'model' => true,
+        ],
+        'name' => "item_supplier_model",
+        'unique' => true
+ ]]]);
+
+
+$qq = new \stdclass;
+$qq->qq = new \stdclass;
+$qq->qq->ee = 2;
+
+$mongo->insert(['collection' => 'test', 'documents' => [['item' => mt_rand(), 'supplier' => 'mt_rand()', 'model' => mb_rand(20), mb_rand(4) => 123], ['item' => mt_rand(), 'supplier' => 'mt_rand()', 'model' => mb_rand(20), mb_rand(4) => 123], ['item' => mt_rand(), 'supplier' => 'mt_rand()', 'model' => mb_rand(20), mb_rand(4) => 123]]]);
+$mongo->insert(['collection' => 'test',
+	'documents' => [
+		['item' => $qq, 'supplier' => 'mt_rand()', 'model' => mb_rand(20), mb_rand(4) => 123],
+		['item' => [1,3,5], 'supplier' => 'mt_rand()', 'model' => mb_rand(20), mb_rand(4) => 123],
+		['item' => [6,9,7], 'supplier' => 'mt_rand()', 'model' => mb_rand(20), mb_rand(4) => 123],
+		['item' => [0,9,7], 'supplier' => 'mt_rand()', 'model' => mb_rand(20), mb_rand(4) => 123],
+	]
+]);
+
+
+$results = $mongo->select(['collection' => 'test', 'query' => []]);
+print_r($results);
+
+
+$results = $mongo->select(['collection' => 'test', 'query' => ['item.0' => 1]]);
+print_r($results);
+
+
+foreach($mongo->tables() as $value) {
 	$mongo->drop($value);
 }
+
 /*
 $request = new Request();
 $router = new Router($request, $response);
