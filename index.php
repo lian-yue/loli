@@ -8,7 +8,7 @@
 /*	Author: Moon
 /*
 /*	Created: UTC 2015-01-03 10:27:12
-/*	Updated: UTC 2015-03-09 14:54:00
+/*	Updated: UTC 2015-03-21 09:08:47
 /*
 /* ************************************************************************** */
 namespace Loli;
@@ -19,25 +19,32 @@ if (!empty($_SERVER['REQUEST_URI']) && in_array(strtolower($_SERVER['REQUEST_URI
 
 
 
+/*
+$n=20;
+$d=7; //公钥
+$e=3; //私钥
+$M=12; //进行加密
+$MM = pow($M, $d) % $n; //(M的d次方，然后除以n取余数)
+
+
+$Q = pow($MM,$e)%$n;
+
+
+echo $Q .'<br/>';
+echo $MM;die;
+*/
+
 
 
 
 require __DIR__ . '/config.php';
 require __DIR__ . '/vendor/autoload.php';
 
-//$qq = new DB\PDO([['protocol' => 'mysql', 'hostname' => 'localhost:3306', 'username' => 'root', 'password' => '874654621', 'database' => 'loli']]);
-$qq = new DB\PDO([['protocol' => 'sqlite', 'database' => __DIR__ . '/data/DatabaseName.db']]);
-
-print_r($tables = $qq->tables());
-//print_r($qq->drop(reset($tables)));
-//print_r($qq->create('testtable', 'CREATE TABLE  :table (id integer,name varchar(255));'));
 
 
 
 
-
-
-
+$DB = new DB\PDO([['protocol' => 'mysql', 'hostname' => 'localhost:3306', 'username' => 'root', 'password' => '874654621', 'database' => 'loli']]);
 
 
 
