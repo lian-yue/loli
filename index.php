@@ -8,7 +8,7 @@
 /*	Author: Moon
 /*
 /*	Created: UTC 2015-01-03 10:27:12
-/*	Updated: UTC 2015-03-21 09:08:47
+/*	Updated: UTC 2015-03-23 10:13:19
 /*
 /* ************************************************************************** */
 namespace Loli;
@@ -45,8 +45,10 @@ require __DIR__ . '/vendor/autoload.php';
 
 
 $DB = new DB\PDO([['protocol' => 'mysql', 'hostname' => 'localhost:3306', 'username' => 'root', 'password' => '874654621', 'database' => 'loli']]);
+$qq = $DB->qq->limit(10);
+$ww = $DB->ww->query('qq', $qq);
 
-
+echo $ww->execute(false)->select();
 
 /*
 
