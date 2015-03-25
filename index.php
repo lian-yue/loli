@@ -8,7 +8,7 @@
 /*	Author: Moon
 /*
 /*	Created: UTC 2015-01-03 10:27:12
-/*	Updated: UTC 2015-03-23 10:13:19
+/*	Updated: UTC 2015-03-25 01:44:41
 /*
 /* ************************************************************************** */
 namespace Loli;
@@ -36,19 +36,16 @@ echo $MM;die;
 
 
 
-
 require __DIR__ . '/config.php';
 require __DIR__ . '/vendor/autoload.php';
 
 
 
+print_r($_SERVER);
+die;
+$DB = new DB([['mysql://root:874654621@127.0.0.1/loli']]);
 
-
-$DB = new DB\PDO([['protocol' => 'mysql', 'hostname' => 'localhost:3306', 'username' => 'root', 'password' => '874654621', 'database' => 'loli']]);
-$qq = $DB->qq->limit(10);
-$ww = $DB->ww->query('qq', $qq);
-
-echo $ww->execute(false)->select();
+$DB->test->column('ID', 'type',4);
 
 /*
 
