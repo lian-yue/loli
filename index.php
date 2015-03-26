@@ -8,7 +8,7 @@
 /*	Author: Moon
 /*
 /*	Created: UTC 2015-01-03 10:27:12
-/*	Updated: UTC 2015-03-26 08:51:37
+/*	Updated: UTC 2015-03-26 12:03:30
 /*
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ require __DIR__ . '/config.php';
 require __DIR__ . '/vendor/autoload.php';
 
 $array = str_split(strtoupper(dechex(93399)), 2);
-print_r($_FILES);
+print_r($array);
 ?>
 
 
