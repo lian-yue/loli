@@ -8,7 +8,7 @@
 /*	Author: Moon
 /*
 /*	Created: UTC 2015-01-03 10:27:12
-/*	Updated: UTC 2015-03-25 16:06:30
+/*	Updated: UTC 2015-03-26 08:51:37
 /*
 /* ************************************************************************** */
 
@@ -27,9 +27,35 @@ echo $Q .'<br/>';
 echo $MM;die;
 */
 
+
 namespace Loli;
 require __DIR__ . '/config.php';
 require __DIR__ . '/vendor/autoload.php';
+
+$array = str_split(strtoupper(dechex(93399)), 2);
+print_r($_FILES);
+?>
+
+
+<html>
+<body>
+
+<form action="upload_file.php" method="post" enctype="multipart/form-data">
+<label for="file">Filename:</label>
+<input type="file" name="file[ww]" id="file" /> 
+<input type="file" name="file[qq]" id="file" /> 
+<input type="file" name="file[ee]" id="file" /> 
+<input type="file" name="file[ee][ff]" id="file" /> 
+<input type="file" name="file[ee][ff][cc" id="file" /> 
+<br />
+<input type="submit" name="submit" value="Submit" />
+</form>
+
+</body>
+</html>
+
+
+<?php
 //print_r($_SERVER);
 /*
 
