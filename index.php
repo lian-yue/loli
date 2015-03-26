@@ -8,16 +8,9 @@
 /*	Author: Moon
 /*
 /*	Created: UTC 2015-01-03 10:27:12
-/*	Updated: UTC 2015-03-25 01:44:41
+/*	Updated: UTC 2015-03-25 16:06:30
 /*
 /* ************************************************************************** */
-namespace Loli;
-// 如果是网页 ICO 结束查询 或者 Flash 请求
-if (!empty($_SERVER['REQUEST_URI']) && in_array(strtolower($_SERVER['REQUEST_URI']), ['/favicon.ico', '/crossdomain.xml', '/robots.txt'])) {
-	exit;
-}
-
-
 
 /*
 $n=20;
@@ -34,19 +27,10 @@ echo $Q .'<br/>';
 echo $MM;die;
 */
 
-
-
+namespace Loli;
 require __DIR__ . '/config.php';
 require __DIR__ . '/vendor/autoload.php';
-
-
-
-print_r($_SERVER);
-die;
-$DB = new DB([['mysql://root:874654621@127.0.0.1/loli']]);
-
-$DB->test->column('ID', 'type',4);
-
+//print_r($_SERVER);
 /*
 
 print_r(\PDO::getAvailableDrivers());
