@@ -8,7 +8,7 @@
 /*	Author: Moon
 /*
 /*	Created: UTC 2015-01-03 10:27:12
-/*	Updated: UTC 2015-03-26 12:03:30
+/*	Updated: UTC 2015-03-28 15:38:00
 /*
 /* ************************************************************************** */
 
@@ -32,6 +32,87 @@ namespace Loli;
 require __DIR__ . '/config.php';
 require __DIR__ . '/vendor/autoload.php';
 
+set_time_limit(120);
+$format = new HTML\Format;
+echo $format(file_get_contents(__DIR__ . '/1.html'));
+echo "\n\n\n\n";
+echo load_time();
+/*
+$style = new HTML\Style;
+echo $style->values('
+  background: rgb(208, 208, 208);
+  color: rgba(85, 85, 85 ,.94);
+  box-shadow:0px 1px 2px 2px rgb(130, 130, 130), 0px 0px 0px 7px rgb(203, 203, 203), 0px 0px 0px 9px white, 0px 0px 0px 11px rgb(102, 102, 102),0px 35px 0px -6px rgb(226, 226, 226) inset;
+   background-image: url("http://www.qq.com/paper.gif");
+
+
+  ');
+
+/*
+$style->style('
+
+.mobile .lists li{width:30%;height: auto; margin:1% 1.666%;background-color:inherit;border:0;border-radius:0;}
+.mobile .lists li .title{font-size:1.2em;height:3.8em;}
+.mobile .lists li .title{font-size:1.2em;height:3.8em;}
+.mobile .lists li .title{font-size:1.2em;height:3.8em;}
+.mobile .lists li .title{font-size:1.2em;height:3.8em;}
+@media only screen and (min-width : 500px) {
+	.mobile .lists li{width:30%;height: auto; margin:1% 1.666%;background-color:inherit;border:0;border-radius:0;}
+	.mobile .lists li .title{font-size:1.2em;height:3.8em;}
+	.mobile .lists li .title{font-size:1.2em;height:3.8em;}
+	.mobile .lists li .title{font-size:1.2em;height:3.8em;}
+	.mobile .lists li .title{font-size:1.2em;height:3.8em;}
+	@media only screen and (min-width : 500px) {
+		.mobile .lists li{width:30%;height: auto; margin:1% 1.666%;background-color:inherit;border:0;border-radius:0;}
+		.mobile .lists li .title{font-size:1.2em;height:3.8em;}
+		.mobile .lists li .title{font-size:1.2em;height:3.8em;}
+		.mobile .lists li .title{font-size:1.2em;height:3.8em;}
+		.mobile .lists li .title{font-size:1.2em;height:3.8em;}
+		@media only screen and (min-width : 500px) {
+			@media only screen and (min-width : 500px) {
+				.mobile .lists li{width:30%;height: auto; margin:1% 1.666%;background-color:inherit;border:0;border-radius:0;}
+				.mobile .lists li .title{font-size:1.2em;height:3.8em;}
+				.mobile .lists li .title{font-size:1.2em;height:3.8em;}
+				.mobile .lists li .title{font-size:1.2em;height:3.8em;}
+				.mobile .lists li .title{font-size:1.2em;height:3.8em;}
+				@media only screen and (min-width : 500px) {
+					.mobile .lists li{width:30%;height: auto; margin:1% 1.666%;background-color:inherit;border:0;border-radius:0;}
+					.mobile .lists li .title{font-size:1.2em;height:3.8em;}
+					.mobile .lists li .title{font-size:1.2em;height:3.8em;}
+					.mobile .lists li .title{font-size:1.2em;height:3.8em;}
+					.mobile .lists li .title{font-size:1.2em;height:3.8em;}
+				}
+			}
+		}
+	}
+}
+.obile .lists li{width:30%;height: auto; margin:1% 1.666%;background-color:inherit;border:0;border-radius:0;}
+.mobile .lists li .title{font-size:1.2em;height:3.8em;}
+.mobile .lists li .title{font-size:1.2em;height:3.8em;}
+.mobile .lists li .title{font-size:1.2em;height:3.8em;}
+.mobile .lists li .title{font-size:1.2em;height:3.8em;}
+');
+
+//$tag(file_get_contents(__DIR__ . '/1.html'));
+
+//echo $username;
+/*
+header('WWW-Authenticate: Basic realm="Autn"');
+header('HTTP/1.0 401 Unauthorized');
+
+  // $strAuthUser= $_SERVER['PHP_AUTH_USER'];           
+  // $strAuthPass= $_SERVER['PHP_AUTH_PW'];
+/*
+if (! ($strAuthUser == "用户" &&  $strAuthPass == "密码")) {
+header('WWW-Authenticate: Basic realm="Autn"');
+header('HTTP/1.0 401 Unauthorized');
+echo "用户验证";
+exit;
+} else {
+echo "验证通过";
+}
+
+/*
 $array = str_split(strtoupper(dechex(93399)), 2);
 print_r($array);
 ?>
