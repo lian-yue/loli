@@ -8,7 +8,7 @@
 /*	Author: Moon
 /*
 /*	Created: UTC 2015-01-03 10:27:12
-/*	Updated: UTC 2015-03-28 15:38:00
+/*	Updated: UTC 2015-03-29 08:43:15
 /*
 /* ************************************************************************** */
 
@@ -32,7 +32,42 @@ namespace Loli;
 require __DIR__ . '/config.php';
 require __DIR__ . '/vendor/autoload.php';
 
-set_time_limit(120);
+
+
+$format = new HTML\Style;
+$format('
+.qq10 {sxsa:dsa;}
+.qq11 {sxsa:dsa;}
+@media only screen and (min-width : 500px) {
+	.qq20 {sxsa:dsa;}
+	.qq21 {sxsa:dsa;}
+	.qq22 {sxsa:dsa;}
+	.qq23 {sxsa:dsa;}
+	@media only screen and (min-width : 500px) {
+		.qq30 {sxsa:dsa;}
+		@media only screen and (min-width : 500px) {
+			@media only screen and (min-width : 500px) {
+				.qq40 {sxsa:dsa;}
+				.qq41 {sxsa:dsa;}
+				.qq42 {sxsa:dsa;}
+				.qq43 {sxsa:dsa;}
+				@media only screen and (min-width : 500px) {
+					.qq50 {sxsa:dsa;}
+				}
+				.qq49 {sxsa:dsa;}
+			}
+		}
+		@media {
+			.qq1110 {sxsa:dsa;}
+		}
+	}
+}
+.qq19 {sxsa:dsa;}
+
+
+');
+
+/*
 $format = new HTML\Format;
 echo $format(file_get_contents(__DIR__ . '/1.html'));
 echo "\n\n\n\n";
