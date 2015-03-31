@@ -8,7 +8,7 @@
 /*	Author: Moon
 /*
 /*	Created: UTC 2015-01-03 10:27:12
-/*	Updated: UTC 2015-03-29 08:43:15
+/*	Updated: UTC 2015-03-31 10:24:42
 /*
 /* ************************************************************************** */
 
@@ -33,11 +33,15 @@ require __DIR__ . '/config.php';
 require __DIR__ . '/vendor/autoload.php';
 
 
-
+/*
 $format = new HTML\Style;
+
+/*
 $format('
 .qq10 {sxsa:dsa;}
+
 .qq11 {sxsa:dsa;}
+
 @media only screen and (min-width : 500px) {
 	.qq20 {sxsa:dsa;}
 	.qq21 {sxsa:dsa;}
@@ -66,12 +70,13 @@ $format('
 
 
 ');
-
+*/
 /*
-$format = new HTML\Format;
+$format = new HTML\Filter;
 echo $format(file_get_contents(__DIR__ . '/1.html'));
 echo "\n\n\n\n";
 echo load_time();
+
 /*
 $style = new HTML\Style;
 echo $style->values('
@@ -394,3 +399,4 @@ function qq(){
 }
 qq();
 */
+
