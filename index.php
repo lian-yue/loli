@@ -8,7 +8,7 @@
 /*	Author: Moon
 /*
 /*	Created: UTC 2015-01-03 10:27:12
-/*	Updated: UTC 2015-04-01 04:38:39
+/*	Updated: UTC 2015-04-02 11:59:36
 /*
 /* ************************************************************************** */
 
@@ -31,6 +31,9 @@ echo $MM;die;
 namespace Loli;
 require __DIR__ . '/config.php';
 require __DIR__ . '/vendor/autoload.php';
+
+
+$request = new HTTP\Request();
 
 
 /*
