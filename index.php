@@ -8,7 +8,7 @@
 /*	Author: Moon
 /*
 /*	Created: UTC 2015-01-03 10:27:12
-/*	Updated: UTC 2015-04-02 11:59:36
+/*	Updated: UTC 2015-04-04 14:12:15
 /*
 /* ************************************************************************** */
 
@@ -28,13 +28,15 @@ echo $MM;die;
 */
 
 
+
+
+
 namespace Loli;
 require __DIR__ . '/config.php';
 require __DIR__ . '/vendor/autoload.php';
 
-
-$request = new HTTP\Request();
-
+// echo T_ARRAY;die;
+//$request = new HTTP\Request();
 
 /*
 $format = new HTML\Style;
@@ -74,7 +76,7 @@ $format('
 
 ');
 */
-/*
+
 $format = new HTML\Filter;
 echo $format(file_get_contents(__DIR__ . '/1.html'));
 echo "\n\n\n\n";
@@ -143,7 +145,7 @@ $style->style('
 header('WWW-Authenticate: Basic realm="Autn"');
 header('HTTP/1.0 401 Unauthorized');
 
-  // $strAuthUser= $_SERVER['PHP_AUTH_USER'];           
+  // $strAuthUser= $_SERVER['PHP_AUTH_USER'];
   // $strAuthPass= $_SERVER['PHP_AUTH_PW'];
 /*
 if (! ($strAuthUser == "用户" &&  $strAuthPass == "密码")) {
@@ -166,11 +168,11 @@ print_r($array);
 
 <form action="upload_file.php" method="post" enctype="multipart/form-data">
 <label for="file">Filename:</label>
-<input type="file" name="file[ww]" id="file" /> 
-<input type="file" name="file[qq]" id="file" /> 
-<input type="file" name="file[ee]" id="file" /> 
-<input type="file" name="file[ee][ff]" id="file" /> 
-<input type="file" name="file[ee][ff][cc" id="file" /> 
+<input type="file" name="file[ww]" id="file" />
+<input type="file" name="file[qq]" id="file" />
+<input type="file" name="file[ee]" id="file" />
+<input type="file" name="file[ee][ff]" id="file" />
+<input type="file" name="file[ee][ff][cc" id="file" />
 <br />
 <input type="submit" name="submit" value="Submit" />
 </form>
