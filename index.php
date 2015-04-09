@@ -8,7 +8,7 @@
 /*	Author: Moon
 /*
 /*	Created: UTC 2015-01-03 10:27:12
-/*	Updated: UTC 2015-04-04 14:12:15
+/*	Updated: UTC 2015-04-08 06:51:34
 /*
 /* ************************************************************************** */
 
@@ -27,13 +27,10 @@ echo $Q .'<br/>';
 echo $MM;die;
 */
 
-
-
-
-
 namespace Loli;
 require __DIR__ . '/config.php';
 require __DIR__ . '/vendor/autoload.php';
+
 
 // echo T_ARRAY;die;
 //$request = new HTTP\Request();
@@ -76,7 +73,7 @@ $format('
 
 ');
 */
-
+/*
 $format = new HTML\Filter;
 echo $format(file_get_contents(__DIR__ . '/1.html'));
 echo "\n\n\n\n";
