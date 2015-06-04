@@ -8,7 +8,7 @@
 /*	Author: Moon
 /*
 /*	Created: UTC 2015-01-03 10:27:12
-/*	Updated: UTC 2015-04-08 06:51:34
+/*	Updated: UTC 2015-06-04 03:27:21
 /*
 /* ************************************************************************** */
 
@@ -27,9 +27,218 @@ echo $Q .'<br/>';
 echo $MM;die;
 */
 
+
+
 namespace Loli;
+
+
+
+
 require __DIR__ . '/config.php';
 require __DIR__ . '/vendor/autoload.php';
+require __DIR__ . '/simple_html_dom.php';
+$contents = file_get_contents(__DIR__ . '/1.html');
+
+
+
+set_time_limit(3);
+
+
+
+
+$dom = new DOM\Node($contents);
+
+$filtertagsName = new DOM\Filtertags();
+$filterAttributes = new DOM\FilterAttributes();
+
+$filtertagsName->filters($dom);
+$filterAttributes->filters($dom);
+
+//echo count($dom->querySelectorAll('a :first-child'));
+
+echo json_encode($dom);
+die;
+if (!empty($_GET['html'])) {
+	echo $dom->format(true);
+}
+/*
+echo strlen((string) $dom->format(true));
+
+
+/*
+$dom = new DOM\Node($contents);
+$filtertagsName = new DOM\Filtertags();
+$filterAttributes = new DOM\FilterAttributes();
+$filtertagsName->filters($dom);
+$filterAttributes->filters($dom);
+echo $dom->format(true);
+echo "\n\n\n";
+echo load_time();
+//$selector = $dom->querySelector('a[href^="java"]');
+
+//echo $selector->attributes['qq'];
+//$filterAttributes = new DOM\FilterAttributes();
+// /$filterAttributes->filters($selector);
+// echo $selector;die;
+// foreach ($selector as $key => $value) {
+	// echo $value . "\n\n\n";
+// }
+
+
+//$dom = str_get_html($contents);
+//echo count($dom->find('html div span.ww,h1,[title="ww"]'));
+
+//$selectorsString = '[qqq]';
+//$selectors =  HTML\Styles::selectors($selectorsString);
+//print_r($selectors);
+//die;
+//$results = $selectors->selectors($selectorsString);
+
+
+/*
+
+$selectors = new HTML\Styles($selectorsString);
+$results = $selectors->selectors($selectorsString);
+echo $selectorsString;
+print_r($results);
+echo 22;die;
+//print_r($selectorsString);die;
+//print_r($selectors);die;
+
+
+//die;
+
+//print_r(HTML\Styles::selectors('#qq:not(:selection:nth-child(5):nth-child(5))'));
+
+
+//echo $string;die;
+//$str1 = '0123456789abcdefg';
+//$str2 = 'z';
+//var_dump(strcspn($str1 , $str2, 9));
+//echo $str1{9};
+//die;
+set_time_limit(10);
+
+$html = new HTML\Node($contents);
+
+$html->querySelectorAll('#qq:not(:selection:nth-child(5):nth-child(5))');
+echo $html . "\n\n\n";
+
+//die;
+
+//for ($i=0; $i < 3; $i++) {
+//	$html = new HTML\Node($html);
+	//$html->unempty();
+	//echo $html . "\n\n\n";
+//	echo strlen($html) . "\n";
+//}
+
+//$html->unempty();
+//echo $html;die;
+//echo $html;
+//$html = new HTML\Node($contents);
+//echo $html;
+//unset($html);
+
+//$html = new HTML\Node($contents);
+//echo $html;
+//echo "\n<br/><br/>";
+//echo "耗时：" . load_time();
+//echo "\n<br/>";
+//echo  "内存：".  load_ram();
+//echo $html;die;
+//print_r($html);
+//new HTML\Node($contents);
+//$dom = str_get_html($contents);
+//echo $dom;
+//new HTML\Node($contents);
+
+/*
+base64->gzip->
+
+1. The answer to life, the universe, and everything.  // 42   https://www.google.com/search?q=The+answer+to+life%2C+the+universe%2C+and+everything
+
+2. xEFBF,xBDEF,xBFBD； 是一首什么诗。  // 锟斤拷  乱码诗  http://baike.baidu.com/link?url=lHABSsrnJpzpf24acqArK2POjbESdHksN1Bm8AGu92jM1TrMPQDG5NUWsqsS25AtxqpcuK5bZ3dxdjqD3oDcj_
+
+3. First RFC number of port C728A49363C9A93A43A7E7F232B5A54A // ftp   765  7 echo   https://support.apple.com/zh-cn/HT202944
+
+:FINAL
+Answer the questions, Contact Invitee: echo love-coder | TINYURL  // http://www.weibo.com/tiveone        http://tinyurl.com/love-coder
+
+
+
+42 锟斤拷 ftp 959 或 echo 792 tiveone
+
+$qq = 'H4sIAAAAAAAAAzPUUwjJSFVIzCsuTy1SKMlXyMlMS9VRKAGKleZllqUWFQN5iXkpCqlAdmVJRmZe
+uh4vFy+XkZ5Chaubk5tOhZOLK4h0c3J5v2f2sxnrn+xoeLls2pPdDU92drxYP/1xQxNIvbGegltm
+UXGJQpCbs0JeaW4S0Lb8NIWC/KISBWdzIwtHE0tjM2NnS0dLY0cTY0dzV3M3I2MjJ1NHUxNHkH4r
+N08/Rx9eLkeoQ4HuKyxNLS7JzM8r1lFwzs8rSUwuUfDMK8ssSU21UkhNzgB6Jb8sVTc5PwWovkYh
+xNMvMjTIBwDO8n7C8AAAAA==';
+
+$qq = base64_decode($qq);
+
+
+echo gzdecode($qq);
+die;
+
+
+if (!function_exists('gzdecode')) {
+    function gzdecode ($data) {
+        $flags = ord(substr($data, 3, 1));
+        $headerlen = 10;
+        $extralen = 0;
+        $filenamelen = 0;
+        if ($flags & 4) {
+            $extralen = unpack('v' ,substr($data, 10, 2));
+            $extralen = $extralen[1];
+            $headerlen += 2 + $extralen;
+        }
+        if ($flags & 8) // Filename
+            $headerlen = strpos($data, chr(0), $headerlen) + 1;
+        if ($flags & 16) // Comment
+            $headerlen = strpos($data, chr(0), $headerlen) + 1;
+        if ($flags & 2) // CRC at end of file
+            $headerlen += 2;
+        $unpacked = @gzinflate(substr($data, $headerlen));
+        if ($unpacked === FALSE)
+              $unpacked = $data;
+        return $unpacked;
+     }
+}
+
+
+
+
+
+//$qq = mb_convert_encoding($qq, 'UTF-8', 'auto');
+echo $qq;die;
+$array = [];
+for($i = 0; $i < strlen($qq); $i++) {
+	$array[] = ord($qq{$i});
+}
+print_r($array);die;
+die;
+//print_r($obj);
+//die;
+/*
+$timeZones = \DateTimeZone::listIdentifiers(\DateTimeZone::PER_COUNTRY, 'CN');
+foreach ( $timeZones as $key => $zoneName )
+{
+    $tz = new \DateTimeZone($zoneName);
+    $loc = $tz->getLocation();
+  //  print_r($loc);die;
+    print($zoneName . " = " . $loc['comments'] . "<br>");
+}
+
+
+
+//print_r(\DateTimeZone::listAbbreviations());die;
+//print_r(\DateTimeZone::listIdentifiers(\DateTimeZone::ALL_WITH_BC));die;
+//$name = new  \Loli\Date\DateTime();
+//print($name);
+//$name = new  Date\DateTime;
+
+
 
 
 // echo T_ARRAY;die;
