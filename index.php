@@ -8,7 +8,7 @@
 /*	Author: Moon
 /*
 /*	Created: UTC 2015-01-03 10:27:12
-/*	Updated: UTC 2015-06-04 03:27:21
+/*	Updated: UTC 2015-06-12 03:30:21
 /*
 /* ************************************************************************** */
 
@@ -31,36 +31,32 @@ echo $MM;die;
 
 namespace Loli;
 
-
-
+$json = json_decode('{"code":1,"message":"\u8fd4\u56de\u7ed3\u679c\u4e3a\u7a7a","data":[]}');
 
 require __DIR__ . '/config.php';
 require __DIR__ . '/vendor/autoload.php';
-require __DIR__ . '/simple_html_dom.php';
 $contents = file_get_contents(__DIR__ . '/1.html');
-
-
+error_reporting(E_ALL);
 
 set_time_limit(3);
 
 
 
+$rule = new DOM\CSS\Rule($contents);
+echo $rule;die;
+echo load_ram();
+//echo $rule;die;
+// die;
 
+//$Rule = new DOM\CSS\Rule('32423 /*@xx/*');
+
+/*
 $dom = new DOM\Node($contents);
+
 
 $filtertagsName = new DOM\Filtertags();
 $filterAttributes = new DOM\FilterAttributes();
 
-$filtertagsName->filters($dom);
-$filterAttributes->filters($dom);
-
-//echo count($dom->querySelectorAll('a :first-child'));
-
-echo json_encode($dom);
-die;
-if (!empty($_GET['html'])) {
-	echo $dom->format(true);
-}
 /*
 echo strlen((string) $dom->format(true));
 
