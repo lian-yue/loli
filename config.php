@@ -55,5 +55,13 @@ $_SERVER['LOLI'] = [
 
 	'ROUTE' => [
 		'file' => __DIR__ . '/routes.php',
+		'host' => ['qq'],
+	],
+
+	'DB' => [
+
+	],
+	'MEMORY' => [
+		'limit' => '512M',
 	],
 ];
