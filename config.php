@@ -38,15 +38,23 @@ $_SERVER['LOLI'] = [
 
 	'LOG' => [
 		'type' => 'File',
-		'path' => __DIR__ . '/data/logs/$date/$level-$time.log',
+		'path' => __DIR__ . '/data/logs/$level/$date/$time.log',
+		'writes' => [0, 1, 2, 3, 4, 5 ,9],
 	],
 
 	'CACHE' => [
-		'type' => 'Memcache',
+		'mode' => 'Memcache',
 		'args' => ['127.0.0.1:11211'],
+
+		// 'mode' => 'File',
+		// 'args' => ['dir' => __DIR__ .'/data/caches']
+
+		// 'mode' => 'Redis',
+		// 'args' => ['127.0.0.1:6379'],
 	],
 
 	'LOCALIZE' => [
+		'file' => __DIR__ . '/localizes/%1$s/%2$s.php',
 		'allLanguage' => ['zh-CN' => '简体中文'],
 		'language' => 'zh-CN',
 		'allTimezone' => ['Asia/Shanghai'],
@@ -59,7 +67,7 @@ $_SERVER['LOLI'] = [
 	],
 
 	'DB' => [
-
+		['protocol' => 'mysql', 'username' => 'root', 'password' => '874654621', 'database' => 'loli'],
 	],
 	'MEMORY' => [
 		'limit' => '512M',

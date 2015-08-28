@@ -15,7 +15,7 @@
 	<head>
 		<meta charset="UTF-8" />
 		<?php if ($refresh >= 0 && is_string($redirect)): ?>
-		<meta http-equiv="refresh" content="<?=$refresh; ?>;URL=<?=$redirect; ?>" />
+		<!-- <meta http-equiv="refresh" content="<?=$refresh; ?>;URL=<?=$redirect; ?>" /> -->
 		<?php endif; ?>
 		<meta name="robots" content="none" />
 		<meta name="viewport" content="width=device-width"/>
@@ -51,7 +51,7 @@
 							}
 							refresh.nodeValue--;
 							if (refresh.nodeValue <= 0) {
-								window.location.href = redirect;
+						//		window.location.href = redirect;
 							}
 						}, 1000);
 					} else {
