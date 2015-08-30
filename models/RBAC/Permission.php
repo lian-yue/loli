@@ -17,14 +17,13 @@ class Permission extends Model{
 	protected $tables = ['rbac_permissions'];
 
 	protected $columns = [
-		'roleID' => ['type' => 'int', 'unsigned' => true, 'increment' => true, 'primary' => 0],
-		'nodeID' => ['type' => 'int', 'unsigned' => true, 'increment' => true, 'primary' => 1],
-		'chmod' => ['type' => 'int'],
+		'roleID' => ['type' => 'int', 'unsigned' => true, 'primary' => 0],
+		'nodeID' => ['type' => 'int', 'unsigned' => true, 'primary' => 1],
+		'status' => ['type' => 'int'],
 		'private' => ['type' => 'bool'],
-		'args' => ['type' => 'array'],
 	];
 
 	protected $primary = ['roleID', 'nodeID'];
 
-	protected $primaryCache = 900;
+	protected $primaryTTL = 1800;
 }

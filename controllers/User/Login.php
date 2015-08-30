@@ -17,7 +17,6 @@ class Login extends Controller{
 	public function index($params) {
 		// $this->token();
 		$user = $this('User')->values(['name' => mt_rand(), 'price' => mt_rand()])->document(['name' => mt_rand(), 'price' => mt_rand()])->select();
-		print_r($this->route->DB);
 		return $this->view('user/login', ['qq' => $user], true);
 	}
 }

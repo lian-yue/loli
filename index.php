@@ -13,15 +13,13 @@
 if (!empty($_SERVER['REQUEST_URI']) && in_array(strtolower($_SERVER['REQUEST_URI']), ['/favicon.ico', '/crossdomain.xml', '/robots.txt'], true)) {
 	exit;
 }
-// HDNOJ
+
 
 require __DIR__ . '/config.php';
 require __DIR__ . '/vendor/autoload.php';
 
 
-
-
-
 $route = new Loli\Route();
+
 $route();
 $route->response->send();
