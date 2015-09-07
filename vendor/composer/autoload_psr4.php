@@ -7,6 +7,17 @@
 /*	Email: admin@lianyue.org
 /*	Author: Moon
 /*
+/*	Created: UTC 2015-08-21 13:42:16
+/*
+/* ************************************************************************** */
+/* ************************************************************************** */
+/*
+/*	Lian Yue
+/*
+/*	Url: www.lianyue.org
+/*	Email: admin@lianyue.org
+/*	Author: Moon
+/*
 /*	Created: UTC 2015-02-25 05:40:48
 /*	Updated: UTC 2015-02-25 07:03:02
 /*
@@ -19,5 +30,6 @@ $baseDir = dirname($vendorDir);
 return array(
     'Controller\\' => array($baseDir . '/controllers'),
     'Model\\' => array($baseDir . '/models'),
+    'Table\\' => array($baseDir . '/tables'),
     'Loli\\' => array($vendorDir . '/loli/base/src/loli'),
 );

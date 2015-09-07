@@ -7,11 +7,17 @@
 /*	Email: admin@lianyue.org
 /*	Author: Moon
 /*
-/*	Created: UTC 2015-08-23 10:27:12
+/*	Created: UTC 2015-09-03 07:14:12
 /*
 /* ************************************************************************** */
-return [
-	'/install/?' => 'Install>index',
-	'/captcha/?' => 'Captcha>index',
-	'/user/login/?' => 'User/Login>index',
-];
+namespace Controller;
+use Loli\Controller, Loli\DB\Cursor;
+class Captcha extends Controller{
+	public function index() {
+		return $this->model('Captcha')->display();
+	}
+
+	public function __RBAC() {
+		return true;
+	}
+}

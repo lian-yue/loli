@@ -7,11 +7,11 @@
 /*	Email: admin@lianyue.org
 /*	Author: Moon
 /*
-/*	Created: UTC 2015-08-23 10:27:12
+/*	Created: UTC 2015-09-04 08:18:10
 /*
 /* ************************************************************************** */
-return [
-	'/install/?' => 'Install>index',
-	'/captcha/?' => 'Captcha>index',
-	'/user/login/?' => 'User/Login>index',
-];
+namespace Model\User;
+use Loli\Model, Model\User;
+class Password extends Model{
+
+}

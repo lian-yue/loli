@@ -11,17 +11,21 @@
 /*
 /* ************************************************************************** */
 namespace Model\RBAC\Role;
-use Loli\Model;
+use Loli\Model, Model\RBAC\Role, Loli\DB\Iterator;
 class_exists('Loli\Model') || exit;
 class Relationship extends Model{
 	protected $tables = ['rbac_role_relationships'];
 
 	protected $columns = [
-		'roleID' => ['type' => 'int', 'unsigned' => true, 'primary' => 0],
-		'relationship' => ['type' => 'int', 'unsigned' => true, 'primary' => 1],
-		'type' => ['type' => 'bool'],
-		'priority' => ['type' => 'int', 'length' => 1],
+		'parent' => ['type' => 'integer', 'unsigned' => true, 'primary' => 0],
+		'roleID' => ['type' => 'integer', 'unsigned' => true, 'primary' => 1],
+		'type' => ['type' => 'boolean'],
+		'priority' => ['type' => 'integer', 'length' => 1],
 	];
 
-	protected $primary = ['roleID', 'inherit'];
+	protected $primary = ['parent', 'roleID'];
+
+	protected function success($name, Iterator $value = NULL) {
+		Role::uniqid(true);
+	}
 }

@@ -11,26 +11,26 @@
 /*
 /* ************************************************************************** */
 namespace Model\RBAC;
-use Loli\Model, Loli\Code, Loli\DB\Iterator, Loli\Cache;
-class_exists('Loli\Model') || exit;
-class Node extends Model{
+use Loli\Table, Loli\Code, Loli\DB\Iterator, Loli\Cache;
+class_exists('Loli\Table') || exit;
+class Node extends Table{
 	protected $tables = ['rbac_nodes'];
 
 	protected $columns = [
-		'ID' => ['type' => 'int', 'unsigned' => true, 'increment' => true, 'primary' => 0],
-		'parent' => ['type' => 'int', 'unsigned' => true, 'unique' => ['parent_key' => 0]],
-		'key' => ['type' => 'text', 'length' => 64, 'unique' => ['parent_key' => 0]],
-		'type' => ['type' => 'int', 'length' => 1],			// 0 = node, 1 = method, 2 = param
-		'name' => ['type' => 'text', 'length' => 64],
-		'sort' => ['type' => 'int', 'length' => 2],
-		'description' => ['type' => 'text', 'length' => 65535],
+		'ID' => ['type' => 'integer', 'unsigned' => true, 'increment' => true, 'primary' => 0],
+		'parent' => ['type' => 'integer', 'unsigned' => true, 'unique' => ['parent_key' => 0]],
+		'key' => ['type' => 'string', 'length' => 64, 'unique' => ['parent_key' => 0]],
+		'type' => ['type' => 'integer', 'length' => 1],			// 0 = node, 1 = method, 2 = param
+		'name' => ['type' => 'string', 'length' => 64],
+		'sort' => ['type' => 'integer', 'length' => 2],
+		'description' => ['type' => 'string', 'length' => 65535],
 	];
 
 	protected $form = [
-		['name' => 'key', 'type' => 'text', 'maxlength' => 64, 'required' => true],
+		['name' => 'key', 'type' => 'string', 'maxlength' => 64, 'required' => true],
 		['name' => 'type', 'type' => 'select', 'option' => [0 => 'Node', 1 => 'Method', 2 => 'Parameter']],
-		['name' => 'name', 'type' => 'text', 'maxlength' => 64, 'required' => true],
-		['name' => 'description', 'type' => 'text', 'maxlength' => 65535],
+		['name' => 'name', 'type' => 'string', 'maxlength' => 64, 'required' => true],
+		['name' => 'description', 'type' => 'string', 'maxlength' => 65535],
 	];
 
 
@@ -38,6 +38,7 @@ class Node extends Model{
 
 	protected $primaryTTL = 1800;
 
+	protected $insertID = 'ID';
 
 	public function getKeys($nodeKeys, $method) {
 		if (!is_array($nodeKeys)) {
@@ -47,17 +48,14 @@ class Node extends Model{
 		if (!$nodeKeys || !$method) {
 			return false;
 		}
+		$uniqid = self::uniqid();
+
 		$nodeKeys = array_map('strtolower', $nodeKeys);
 		$method = strtolower($method);
-
-		if (!$uniqid = Cache::get('uniqid', __CLASS__)) {
-			$uniqid = uniqid();
-			Cache::add($uniqid, 'uniqid', __CLASS__, -1);
-		}
 		$cacheKey = $uniqid . implode('/', $nodeKeys) . '//' . $method;
 
 
-		if (!($results = Cache::get($cacheKey, __CLASS__)) || 1 == 1) {
+		if (!$results = Cache::get($cacheKey, __CLASS__)) {
 
 			// 清空选项
 			$this->options = [];
@@ -100,7 +98,19 @@ class Node extends Model{
 		return $results;
 	}
 
+
+	public static function uniqid($delete = false) {
+		if ($delete) {
+			$uniqid = uniqid();
+			Cache::set($uniqid, 'uniqid', __CLASS__, -1);
+		} elseif (!$uniqid = Cache::get('uniqid', __CLASS__)) {
+			$uniqid = uniqid();
+			Cache::add($uniqid, 'uniqid', __CLASS__, -1);
+		}
+		return $uniqid;
+	}
+
 	protected function success($name, Iterator $value = NULL) {
-		Cache::delete('uniqid', __CLASS__);
+		self::uniqid(true);
 	}
 }

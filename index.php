@@ -19,7 +19,8 @@ require __DIR__ . '/config.php';
 require __DIR__ . '/vendor/autoload.php';
 
 
-$route = new Loli\Route();
 
+
+$route = new Loli\Route();
 $route();
 $route->response->send();

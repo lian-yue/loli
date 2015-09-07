@@ -11,27 +11,29 @@
 /*
 /* ************************************************************************** */
 namespace Model\RBAC;
-use Loli\Model, Loli\DB\Iterator, Loli\Cache;
-class_exists('Loli\Model') || exit;
-class Role extends Model{
+use Loli\Table, Loli\DB\Iterator, Loli\Cache;
+class_exists('Loli\Table') || exit;
+class Role extends Table{
 	protected $tables = ['rbac_roles'];
 
 	protected $columns = [
-		'ID' => ['type' => 'int', 'unsigned' => true, 'increment' => true, 'primary' => 0],
-		'name' => ['type' => 'text', 'length' => 64],
-		'sort' => ['type' => 'int', 'length' => 3, 'key' => ['sort' => 0]],
-		'status' => ['type' => 'bool', 'key' => ['status' => 0]],
-		'description' => ['type' => 'text', 'length' => 65535],
+		'ID' => ['type' => 'integer', 'unsigned' => true, 'increment' => true, 'primary' => 0],
+		'name' => ['type' => 'string', 'length' => 64],
+		'sort' => ['type' => 'integer', 'length' => 3, 'key' => ['sort' => 0]],
+		'status' => ['type' => 'boolean', 'key' => ['status' => 0]],
+		'description' => ['type' => 'string', 'length' => 65535],
 	];
 
 	protected $form = [
-		['name' => 'name', 'type' => 'text', 'maxlength' => 64, 'required' => true],
-		['name' => 'description', 'type' => 'text', 'maxlength' => 65535],
+		['name' => 'name', 'type' => 'string', 'maxlength' => 64, 'required' => true],
+		['name' => 'description', 'type' => 'string', 'maxlength' => 65535],
 	];
 
 	protected $primary = ['ID'];
 
 	protected $primaryTTL = 1800;
+
+	protected $insertID = 'ID';
 
 	public static function uniqid($delete = false) {
 		if ($delete) {
@@ -45,6 +47,6 @@ class Role extends Model{
 	}
 
 	protected function success($name, Iterator $value = NULL) {
-		Role::uniqid(true);
+		self::uniqid(true);
 	}
 }
