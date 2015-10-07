@@ -32,6 +32,14 @@ $_SERVER['LOLI'] = [
 		'dir' => __DIR__ . '/views',
 	],
 
+	'MODEL' => [
+		//'RBAC' => '',
+		//'token' => '',
+		//'login' => '',
+		//'notLogged' => '',
+	],
+
+
 	'MESSAGE' => [
 		'hosts' => ['loli.dev'],
 	],
@@ -53,6 +61,10 @@ $_SERVER['LOLI'] = [
 		// 'args' => ['127.0.0.1:6379'],
 	],
 
+	'STORAGE' => [
+		'' => ['dir' => __DIR__ . '/data/'],
+	],
+
 	'LOCALIZE' => [
 		'file' => __DIR__ . '/localizes/%1$s/%2$s.php',
 		'allLanguage' => ['zh-CN' => '简体中文'],
@@ -69,7 +81,11 @@ $_SERVER['LOLI'] = [
 	'DB' => [
 		['protocol' => 'mysql', 'username' => 'root', 'password' => '874654621', 'database' => 'loli'],
 	],
+	'CURL' => [
+		'cookie' => __DIR__. '/data/curl',
+	],
 	'MEMORY' => [
 		'limit' => '512M',
 	],
+
 ];

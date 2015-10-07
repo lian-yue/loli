@@ -11,7 +11,18 @@
 /*
 /* ************************************************************************** */
 return [
-	'/install/?' => 'Install>index',
-	'/captcha/?' => 'Captcha>index',
-	'/user/login/?' => 'User/Login>index',
+	'GET/install/?' => 'Install.view',
+	'POST/install/?' => 'Install.post',
+
+	'/captcha/?' => 'Captcha.view',
+	'/captcha/test/?' => 'Captcha.test',
+
+
+
+	// 用户
+	'GET/user/(\w+)/?' => 'User.$1View',
+	'POST/user/(\w+)/?' => 'User.$1',
+
+	'/user/emailExists/?' => 'User.emailExists',
+	'/user/usernameExists/?' => 'User.usernameExists',
 ];

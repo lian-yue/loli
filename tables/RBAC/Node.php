@@ -10,7 +10,7 @@
 /*	Created: UTC 2015-08-26 14:37:30
 /*
 /* ************************************************************************** */
-namespace Model\RBAC;
+namespace Table\RBAC;
 use Loli\Table, Loli\Code, Loli\DB\Iterator, Loli\Cache;
 class_exists('Loli\Table') || exit;
 class Node extends Table{
@@ -19,36 +19,34 @@ class Node extends Table{
 	protected $columns = [
 		'ID' => ['type' => 'integer', 'unsigned' => true, 'increment' => true, 'primary' => 0],
 		'parent' => ['type' => 'integer', 'unsigned' => true, 'unique' => ['parent_key' => 0]],
-		'key' => ['type' => 'string', 'length' => 64, 'unique' => ['parent_key' => 0]],
+		'key' => ['type' => 'binary', 'length' => 64, 'unique' => ['parent_key' => 0]],
 		'type' => ['type' => 'integer', 'length' => 1],			// 0 = node, 1 = method, 2 = param
 		'name' => ['type' => 'string', 'length' => 64],
 		'sort' => ['type' => 'integer', 'length' => 2],
 		'description' => ['type' => 'string', 'length' => 65535],
 	];
 
-	protected $form = [
-		['name' => 'key', 'type' => 'string', 'maxlength' => 64, 'required' => true],
+	/*protected $form = [
+		['name' => 'key', 'type' => 'text', 'maxlength' => 64, 'required' => true],
 		['name' => 'type', 'type' => 'select', 'option' => [0 => 'Node', 1 => 'Method', 2 => 'Parameter']],
-		['name' => 'name', 'type' => 'string', 'maxlength' => 64, 'required' => true],
-		['name' => 'description', 'type' => 'string', 'maxlength' => 65535],
-	];
+		['name' => 'name', 'type' => 'text', 'maxlength' => 64, 'required' => true],
+		['name' => 'description', 'type' => 'text', 'maxlength' => 65535],
+	];*/
 
 
 	protected $primary = ['ID'];
-
-	protected $primaryTTL = 1800;
 
 	protected $insertID = 'ID';
 
 	public function getKeys($nodeKeys, $method) {
 		if (!is_array($nodeKeys)) {
-			$nodeKeys = array_filter(explode('/', str_replace('\\', '/', $nodeKeys)));
+			$nodeKeys = array_filter(explode('/', strtr($nodeKeys, '\\.', '/')));
 		}
 
 		if (!$nodeKeys || !$method) {
 			return false;
 		}
-		$uniqid = self::uniqid();
+		$uniqid = $this->uniqid();
 
 		$nodeKeys = array_map('strtolower', $nodeKeys);
 		$method = strtolower($method);
@@ -65,11 +63,9 @@ class Node extends Table{
 			$nodes = [];
 			$parent = 0;
 			foreach ($nodeKeys as $key) {
-				$select = $this->flush()->fields(['ID'])->query('parent', $parent, '=')->query('key', $key, '=')->query('type', 0, '=')->limit(1)->select();
-				if (!count($select)) {
+				if (!$node = $this->flush()->fields(['ID'])->query('parent', $parent, '=')->query('key', $key, '=')->query('type', 0, '=')->selectRow()) {
 					return false;
 				}
-				$node = reset($select);
 				$parent = $node->ID;
 				$nodes[] = $node->ID;
 			}
@@ -77,29 +73,26 @@ class Node extends Table{
 
 
 			// 读方法
-			$this->querys = [];
-			$select = $this->flush()->fields(['ID'])->query('parent', end($nodes), '=')->query('key', $method, '=')->query('type', 0, '=')->limit(1)->select();
-			if (count($select)) {
+			if (!$select = $this->flush()->fields(['ID'])->query('parent', end($nodes), '=')->query('key', $method, '=')->query('type', 0, '=')->selectRow()) {
 				return false;
 			}
-			$method = reset($select)->ID;
+			$method = $select->ID;
 
 
 			// 读取参数
 			$params = [];
-			$this->fields = $this->querys = [];
 			foreach($this->flush()->fields(['ID', 'key'])->query('parent', $method, '=')->query('type', 3, '=')->select() as $param) {
 				$params[$param->key] = $param->ID;
 			}
 
 			$results = [$nodes, $method, $params];
-			Cache::set($results, $cacheKey, __CLASS__, $this->primaryTTL);
+			Cache::set($results, $cacheKey, __CLASS__, 3600);
 		}
 		return $results;
 	}
 
 
-	public static function uniqid($delete = false) {
+	public function uniqid($delete = false) {
 		if ($delete) {
 			$uniqid = uniqid();
 			Cache::set($uniqid, 'uniqid', __CLASS__, -1);
@@ -110,7 +103,7 @@ class Node extends Table{
 		return $uniqid;
 	}
 
-	protected function success($name, Iterator $value = NULL) {
-		self::uniqid(true);
+	protected function success($name, Iterator $iterator = NULL) {
+		$this->uniqid(true);
 	}
 }

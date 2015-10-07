@@ -10,8 +10,8 @@
 /*	Created: UTC 2015-08-28 11:44:06
 /*
 /* ************************************************************************** */
-namespace Model\RBAC;
-use Loli\Table;
+namespace Table\RBAC;
+use Loli\Table, Loli\DB\Iterator;
 class_exists('Loli\Table') || exit;
 class Token extends Table{
 	protected $tables = ['rbac_tokens'];
@@ -21,26 +21,35 @@ class Token extends Table{
 		'userID' => ['type' => 'integer', 'length' => 4, 'unsigned' => true],
 		'IP' => ['type' => 'string', 'length' => 40],
 		'userAgent' => ['type'=> 'string', 'length' => 255],
-		'created' => ['type' => 'datetime'],
-		'expires' => ['type' => 'datetime'],
+		'created' => ['type' => 'timestamp'],
+		'expired' => ['type' => 'datetime'],
 	];
 
 	protected $primary = ['token'];
 
 	protected $primaryTTL = 1800;
 
-	public function currentUserID() {
-		$token = $this->route->request->getToken();
-		if (!count($results = $this->select($token))) {
-			$this->values(['token' => $token, 'IP' => $this->route->request->getIP(), 'userAgent' => $this->route->request->getHeader('User-Agent'), 'created' => gmdate('Y-m-d H:i:s')])->insert();
-			return 0;
-		}
+	protected $userID;
 
-		$result = reset($results);
-		if ($result->expires && $result->expires !== '0000-00-00 00:00:00' && $result->expires < gmdate('Y-m-d H:i:s')) {
-			$this->values(['userID' => 0, 'expires' => '0000-00-00 00:00:00'])->update($result->token);
-			return 0;
+	public function userID() {
+		if ($this->userID === NULL) {
+			$this->userID = 0;
+			$token = $this->route->request->getToken();
+			if (!$result = $this->selectRow($token)) {
+				$this->flush()->values(['token' => $token, 'IP' => $this->route->request->getIP(), 'userAgent' => $this->route->request->getHeader('User-Agent')])->insert();
+				return 0;
+			}
+
+			if ($result->expired && $result->expired !== '0000-00-00 00:00:00' && $result->expired < gmdate('Y-m-d H:i:s')) {
+				$this->flush()->values(['userID' => 0, 'expired' => '0000-00-00 00:00:00'])->update($result->token);
+				return 0;
+			}
+			$this->userID = $result->userID;
 		}
-		return $result->userID;
+		return $this->userID;
+	}
+
+	protected function success($name, Iterator $iterator = NULL) {
+		$this->userID = NULL;
 	}
 }

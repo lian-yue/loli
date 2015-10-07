@@ -11,46 +11,71 @@
 /*
 /* ************************************************************************** */
 namespace Model;
-use Loli\Model, Loli\Cache, Loli\Captcha\GD as _Captcha, Loli\Code;
+use Loli\Model, Loli\Captcha\GD as _Captcha, Loli\Code, Loli\Message;
 class_exists('Loli\Model') || exit;
 class Captcha extends Model{
 
-	public function display() {
+	protected $form = [
+		['name' => '_captcha', 'title' => 'Captcha', 'type' => 'text', 'required' => true, 'errormessage' => 10010],
+	];
 
+	public function view(array $params) {
 		$captcha = new _Captcha(Code::rand(4, '0123456789QWERTYUIOPASDFGHJKLZXCVBNM'));
 		$captcha->font = __DIR__ .'/fonts';
 		$captcha->dirBackground = __DIR__ .'/backgrounds';
 		$captcha->angle = [-15, 15];
 
-		$captcha->width = ($width = $this->request->getparam('width', 150)) < 100 || $width > 450 ? 150 : $width;
+		$captcha->width = empty($params['width']) || $params['width'] < 100 || $params['width'] > 450 ? 150 : intval($params['width']);
 		$captcha->height = intval($captcha->width / 3);
-		$captcha->color = ($color = $this->request->getparam('color', '')) && ($rgb = $captcha->rgb($color)) ? $rgb : ['red' => 0, 'green' => mt_rand(50, 100),  'blue' => 150];
+		$captcha->color = $this->rbg($params, 'color', ['red' => 0, 'green' => mt_rand(50, 100),  'blue' => 150]);
 
-		if (($background = $this->request->getparam('background', '')) && ($rgb = $captcha->rgb($background))) {
-			$captcha->background = $rgb;
-		} else {
+		if (!$captcha->background = $this->rbg($params, 'background', [])) {
 			$rand = mt_rand(220, 255);
 			$captcha->background = ['red' => $rand, 'green' => $rand,  'blue' => $rand];
 		}
 
-		$ID = __CLASS__ . $this->request->getparam('ID', '');
-		$this->session->set($ID, $captcha->code);
+		$ID = __CLASS__ . (empty($params['ID']) || !is_scalar($params['ID']) ? '' : $params['ID']);
+		$this->session->set($captcha->code, $ID);
 		$this->response->setHeader('Content-Type', $captcha->mime())->setCache('no-cache', 0)->setCache('max-age', 0);
 		return [$captcha, 'display'];
 	}
 
-
-
-	public function verify() {
-		if (!$this->request->getparam('_captcha', '')) {
-			throw new Message(1011, Message::ERROR);
+	public function test(array $params) {
+		$this->formVerify($params);
+		$ID = __CLASS__ . (empty($params['_captchaID']) || !is_scalar($params['_captchaID']) ? '' : $params['_captchaID']);
+		$captcha = $this->session->get($ID);
+		if (!is_scalar($params['_captcha']) || strtoupper(trim($params['_captcha'])) !== $captcha) {
+			throw new Message([10019, $this->localize->translate('Captcha'), '_captcha'], Message::ERROR);
 		}
+		throw new Message(200);
+	}
 
-		$ID = __CLASS__ . $this->request->getparam('_captchaID', '');
+	public function verify(array $params) {
+		$this->formVerify($params);
+		$ID = __CLASS__ . (empty($params['_captchaID']) || !is_scalar($params['_captchaID']) ? '' : $params['_captchaID']);
 		$captcha = $this->session->get($ID);
 		$this->session->delete($ID);
-		if (strtoupper($this->request->getparam('_captcha', '')) !== $captcha) {
-			throw new Message(1010, Message::ERROR);
+		if (!is_scalar($params['_captcha']) || strtoupper(trim($params['_captcha'])) !== $captcha) {
+			throw new Message([10019, $this->localize->translate('Captcha'), '_captcha'], Message::ERROR);
 		}
 	}
+
+	protected function rbg(array &$params, $key, array $default) {
+		if (empty($params[$key]) || !is_string($params[$key])) {
+			return $default;
+		}
+		$rgb = $params[$key];
+		if ($rgb{0} === '#') {
+			$rgb =  substr($rgb, 1);
+		}
+		if (strlen($rgb) !== 6) {
+			return $default;
+		}
+		return [
+			'red' => hexdec(substr($rgb, 0, 2)),
+			'green' => hexdec(substr($rgb, 2, 2)),
+			'blue' => hexdec(substr($rgb, 4, 2)),
+		];
+	}
+
 }

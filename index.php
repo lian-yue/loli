@@ -14,11 +14,8 @@ if (!empty($_SERVER['REQUEST_URI']) && in_array(strtolower($_SERVER['REQUEST_URI
 	exit;
 }
 
-
 require __DIR__ . '/config.php';
 require __DIR__ . '/vendor/autoload.php';
-
-
 
 
 $route = new Loli\Route();

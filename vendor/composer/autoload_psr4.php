@@ -28,7 +28,6 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
-    'Controller\\' => array($baseDir . '/controllers'),
     'Model\\' => array($baseDir . '/models'),
     'Table\\' => array($baseDir . '/tables'),
     'Loli\\' => array($vendorDir . '/loli/base/src/loli'),
