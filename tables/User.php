@@ -37,7 +37,6 @@ class User extends Table{
 
 	protected $insertID = 'ID';
 
-
 	protected function write($name, Iterator $iterator = NULL) {
 		foreach ($this->documents as &$document) {
 			foreach ($document as $name => &$column) {
