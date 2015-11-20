@@ -11,7 +11,7 @@
 /*
 /* ************************************************************************** */
 namespace Table;
-use Loli\Table, Loli\DB\Iterator, Loli\DB\Param, Loli\Code;
+use Loli\Table, Loli\DB\Iterator, Loli\DB\Param, Loli\Crypt\Password;
 class_exists('Loli\Table') || exit;
 class User extends Table{
 	protected $tables = ['users'];
@@ -41,7 +41,7 @@ class User extends Table{
 		foreach ($this->documents as &$document) {
 			foreach ($document as $name => &$column) {
 				if ($column->name === 'password' && $column->value && !is_object($column->value)) {
-					$column->value = Code::passwordHash($column->value);
+					$column->value = Password::hash($column->value);
 				}
 			}
 		}

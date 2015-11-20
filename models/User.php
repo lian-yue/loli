@@ -11,19 +11,19 @@
 /*
 /* ************************************************************************** */
 namespace Model;
-use Loli\Model, Loli\Message, Loli\Code, Loli\Cache, Loli\DB\Row, Loli\Email;
+use Loli\Model, Loli\Message, Loli\Crypt\Code, Loli\Crypt\Password, Loli\Cache, Loli\DB\Row, Loli\Email;
 class_exists('Loli\Model') || exit;
 class User extends Model{
 
 
 
 	protected $form = [
-		['name' => 'user', 'type' => 'text', 'maxlength' => 64, 'required' => true, 'errormessage' => 11000],
-		['name' => 'nicename', 'type' => 'text', 'maxlength' => 32, 'errormessage' => 11010],
-		['name' => 'ID', 'type' => 'number', 'required' => true, 'min' => 1, 'errormessage' => 11020],
-		['name' => 'email', 'type' => 'email', 'required' => true, 'maxlength' => 64, 'errormessage' => 11030],
-		['name' => 'username', 'type' => 'text', 'required' => true, 'pattern' => '^[0-9a-zA-Z_-]*[a-zA-Z][0-9a-zA-Z_-]*$', 'minlength' => 3, 'maxlength' => 32, 'errormessage' => 11040],
-		['name' => 'password', 'type' => 'password', 'minlength' => 6, 'required' => true, 'errormessage' => 11050],
+		['name' => 'user', 'type' => 'text', 'maxlength' => 64, 'required' => true, 'errorMessage' => 11000],
+		['name' => 'nicename', 'type' => 'text', 'maxlength' => 32, 'errorMessage' => 11010],
+		['name' => 'ID', 'type' => 'number', 'required' => true, 'min' => 1, 'errorMessage' => 11020],
+		['name' => 'email', 'type' => 'email', 'required' => true, 'maxlength' => 64, 'errorMessage' => 11030],
+		['name' => 'username', 'type' => 'text', 'required' => true, 'pattern' => '^[0-9a-zA-Z_-]*[a-zA-Z][0-9a-zA-Z_-]*$', 'minlength' => 3, 'maxlength' => 32, 'errorMessage' => 11040],
+		['name' => 'password', 'type' => 'password', 'minlength' => 6, 'required' => true, 'errorMessage' => 11050],
 	];
 
 	protected $tokens = ['login', 'signUp', 'getPasswordSend', 'getPasswordReset', 'settings', 'password'];
@@ -158,13 +158,13 @@ class User extends Model{
 			$username = substr($username, 0, 1) . '***';
 		}
 
-		return $this->view('user.getpasswordsend', ['username' => $username, 'userCode' => Code::encode($user->ID, __CLASS__), 'sends' => $sends]);
+		return $this->getView('user.getpasswordsend', ['username' => $username, 'userCode' => Code::encode($user->ID, __CLASS__), 'sends' => $sends]);
 	}
 
 
 	public function getPasswordResetView(array $params) {
 		$user = $this->codeVerify($params, 'getPassword');
-		return $this->view('user.getpasswordreset', ['results'=> [$user]]);
+		return $this->getView('user.getpasswordreset', ['results'=> [$user]]);
 	}
 
 
@@ -218,7 +218,7 @@ class User extends Model{
 		}
 
 		// 密码错误
-		if (!Code::passwordVerify($password, $user->password)) {
+		if (!Password::verify($password, $user->password)) {
 			$this->tables['User.log']->values(['userID' => $user->ID, 'type' => 'passwordError', 'IP' => $this->request->getIP()])->insert();
 			throw new Message([11059, $this->localize->translate('Password'), 'password'], Message::ERROR, ['captcha' => $this->getIncrement('login') >= 3]);
 		}
@@ -510,7 +510,7 @@ class User extends Model{
 			$params['captcha'] = $captcha;
 		}
 		$params['form'] = $form;
-		return $this->view($view, $params);
+		return $this->getView($view, $params);
 	}
 
 	protected function getIncrement($type) {

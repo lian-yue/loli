@@ -11,7 +11,7 @@
 /*
 /* ************************************************************************** */
 namespace Table\RBAC;
-use Loli\Table, Loli\Code, Loli\DB\Iterator, Loli\Cache;
+use Loli\Table, Loli\DB\Iterator, Loli\Cache;
 class_exists('Loli\Table') || exit;
 class Node extends Table{
 	protected $tables = ['rbac_nodes'];

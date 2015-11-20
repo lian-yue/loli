@@ -22,7 +22,7 @@
 /*	Updated: UTC 2015-02-27 12:52:10
 /*
 /* ************************************************************************** */
-$_SERVER['LOLI'] = [
+return [
 	'DEBUG' => [
 		'is' => true,
 		'display' => E_ALL,
@@ -55,7 +55,7 @@ $_SERVER['LOLI'] = [
 		'args' => ['127.0.0.1:11211'],
 
 		// 'mode' => 'File',
-		// 'args' => ['dir' => __DIR__ .'/data/caches']
+		// 'args' => ['dir' => __DIR__ .'/data/cache']
 
 		// 'mode' => 'Redis',
 		// 'args' => ['127.0.0.1:6379'],
@@ -75,7 +75,6 @@ $_SERVER['LOLI'] = [
 
 	'ROUTE' => [
 		'file' => __DIR__ . '/routes.php',
-		'host' => ['qq'],
 	],
 
 	'DB' => [

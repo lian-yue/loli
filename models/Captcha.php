@@ -11,15 +11,15 @@
 /*
 /* ************************************************************************** */
 namespace Model;
-use Loli\Model, Loli\Captcha\GD as _Captcha, Loli\Code, Loli\Message;
+use Loli\Model, Loli\Captcha\GD as _Captcha, Loli\Crypt\Code, Loli\Message;
 class_exists('Loli\Model') || exit;
 class Captcha extends Model{
 
 	protected $form = [
-		['name' => '_captcha', 'title' => 'Captcha', 'type' => 'text', 'required' => true, 'errormessage' => 10010],
+		['name' => '_captcha', 'title' => 'Captcha', 'type' => 'text', 'required' => true, 'errorMessage' => 10010],
 	];
 
-	public function view(array $params) {
+	public function index(array $params) {
 		$captcha = new _Captcha(Code::rand(4, '0123456789QWERTYUIOPASDFGHJKLZXCVBNM'));
 		$captcha->font = __DIR__ .'/fonts';
 		$captcha->dirBackground = __DIR__ .'/backgrounds';
@@ -41,6 +41,7 @@ class Captcha extends Model{
 	}
 
 	public function test(array $params) {
+		$params += ['_captcha' => ''];
 		$this->formVerify($params);
 		$ID = __CLASS__ . (empty($params['_captchaID']) || !is_scalar($params['_captchaID']) ? '' : $params['_captchaID']);
 		$captcha = $this->session->get($ID);
@@ -51,6 +52,7 @@ class Captcha extends Model{
 	}
 
 	public function verify(array $params) {
+		$params += ['_captcha' => ''];
 		$this->formVerify($params);
 		$ID = __CLASS__ . (empty($params['_captchaID']) || !is_scalar($params['_captchaID']) ? '' : $params['_captchaID']);
 		$captcha = $this->session->get($ID);
