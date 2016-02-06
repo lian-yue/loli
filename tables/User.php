@@ -11,14 +11,13 @@
 /*
 /* ************************************************************************** */
 namespace Table;
-use Loli\Table, Loli\DB\Iterator, Loli\DB\Param, Loli\Crypt\Password;
+use Loli\Table, Loli\DB\Iterator, Loli\Crypt\Password;
 class_exists('Loli\Table') || exit;
 class User extends Table{
 	protected $tables = ['users'];
 
 	protected $columns = [
 		'ID' => ['type' => 'integer', 'unsigned' => true, 'increment' => true, 'primary' => 0],
-		'email' => ['type' => 'string', 'length' => 64, 'unique' => ['email' => 0]],
 		'username' => ['type' => 'string', 'length' => 32, 'unique' => ['username' => 0]],
 		'password' => ['type' => 'string', 'length' => 64],
 		'nicename' => ['type' => 'string', 'length' => 32],
@@ -39,7 +38,7 @@ class User extends Table{
 
 	protected function write($name, Iterator $iterator = NULL) {
 		foreach ($this->documents as &$document) {
-			foreach ($document as $name => &$column) {
+			foreach ($document as &$column) {
 				if ($column->name === 'password' && $column->value && !is_object($column->value)) {
 					$column->value = Password::hash($column->value);
 				}

@@ -158,13 +158,13 @@ class User extends Model{
 			$username = substr($username, 0, 1) . '***';
 		}
 
-		return $this->getView('user.getpasswordsend', ['username' => $username, 'userCode' => Code::encode($user->ID, __CLASS__), 'sends' => $sends]);
+		return $this->view('user.getpasswordsend', ['username' => $username, 'userCode' => Code::encode($user->ID, __CLASS__), 'sends' => $sends]);
 	}
 
 
 	public function getPasswordResetView(array $params) {
 		$user = $this->codeVerify($params, 'getPassword');
-		return $this->getView('user.getpasswordreset', ['results'=> [$user]]);
+		return $this->view('user.getpasswordreset', ['results'=> [$user]]);
 	}
 
 
@@ -188,7 +188,7 @@ class User extends Model{
 			$message = new Message([11051, $this->localize->translate('Password'), 'password']);
 		}
 
-		if ($this->request->getIP() !== '127.0.0.1' && $this->getIncrement('login') >= 3) {
+		if ($this->request->getClientAddr() !== '127.0.0.1' && $this->getIncrement('login') >= 3) {
 			// 需要检查验证码
 			try {
 				$this->model('Captcha')->formVerify($params, $message);
@@ -219,7 +219,7 @@ class User extends Model{
 
 		// 密码错误
 		if (!Password::verify($password, $user->password)) {
-			$this->tables['User.log']->values(['userID' => $user->ID, 'type' => 'passwordError', 'IP' => $this->request->getIP()])->insert();
+			$this->tables['User.log']->values(['userID' => $user->ID, 'type' => 'passwordError', 'IP' => $this->request->getClientAddr()])->insert();
 			throw new Message([11059, $this->localize->translate('Password'), 'password'], Message::ERROR, ['captcha' => $this->getIncrement('login') >= 3]);
 		}
 
@@ -257,7 +257,7 @@ class User extends Model{
 		}
 
 
-		if ($this->request->getIP() !== '127.0.0.1') {
+		if ($this->request->getClientAddr() !== '127.0.0.1') {
 			// 需要检查验证码
 			try {
 				$this->model('Captcha')->formVerify($params, $message);
@@ -510,15 +510,15 @@ class User extends Model{
 			$params['captcha'] = $captcha;
 		}
 		$params['form'] = $form;
-		return $this->getView($view, $params);
+		return $this->view($view, $params);
 	}
 
 	protected function getIncrement($type) {
-		return Cache::get($type. $this->request->getIP(), __CLASS__);
+		return Cache::get($type. $this->request->getClientAddr(), __CLASS__);
 	}
 
 	protected function setIncrement($type, $ttl = 1800) {
-		Cache::add(0, $type . $this->request->getIP(), __CLASS__, $ttl);
-		Cache::incr(1, $type . $this->request->getIP(), __CLASS__);
+		Cache::add(0, $type . $this->request->getClientAddr(), __CLASS__, $ttl);
+		Cache::incr(1, $type . $this->request->getClientAddr(), __CLASS__);
 	}
 }

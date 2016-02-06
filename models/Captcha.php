@@ -24,7 +24,6 @@ class Captcha extends Model{
 		$captcha->font = __DIR__ .'/fonts';
 		$captcha->dirBackground = __DIR__ .'/backgrounds';
 		$captcha->angle = [-15, 15];
-
 		$captcha->width = empty($params['width']) || $params['width'] < 100 || $params['width'] > 450 ? 150 : intval($params['width']);
 		$captcha->height = intval($captcha->width / 3);
 		$captcha->color = $this->rbg($params, 'color', ['red' => 0, 'green' => mt_rand(50, 100),  'blue' => 150]);
@@ -37,7 +36,7 @@ class Captcha extends Model{
 		$ID = __CLASS__ . (empty($params['ID']) || !is_scalar($params['ID']) ? '' : $params['ID']);
 		$this->session->set($captcha->code, $ID);
 		$this->response->setHeader('Content-Type', $captcha->mime())->setCache('no-cache', 0)->setCache('max-age', 0);
-		return [$captcha, 'display'];
+		return $captcha;
 	}
 
 	public function test(array $params) {

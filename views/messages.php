@@ -18,7 +18,7 @@
 		<!-- <meta http-equiv="refresh" content="<?=$refresh; ?>;URL=<?=$redirect; ?>" /> -->
 		<?php endif; ?>
 		<meta name="robots" content="none" />
-		<meta name="viewport" content="width=device-width"/>
+		<meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
 		<title><?=$localize->translate('Messages') ?></title>
 		<style type="text/css">
 			*{padding:0; margin:0;}

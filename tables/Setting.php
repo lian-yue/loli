@@ -17,20 +17,19 @@ class Setting extends Table{
 	protected $tables = ['settings'];
 
 	protected $columns = [
-		'ID' => ['type' => 'integer', 'unsigned' => true, 'increment' => true, 'primary' => 0],
-		'name' => ['type' => 'binary', 'length' => 32, 'key' => ['name' => 0]],
+		'name' => ['type' => 'binary', 'length' => 32, 'primary' => 0],
 		'value' => ['type' => 'string', 'length' => 16777215],
 		'auto' => ['type' => 'boolean'],
 	];
 
-	protected $primary = ['userID', 'name'];
+	protected $primary = ['name'];
 
 	protected $results = NULL;
 
 	public function getValue($name, $default = NULL, $auto = true) {
 		if ($this->results === NULL && !is_array($this->results = Cache::get('get', __CLASS__))) {
 			$this->results = [];
-			foreach ($this->flush()->query('auto', true)->group('name')->order('ID', 'DESC')->select() as $setting) {
+			foreach ($this->flush()->query('auto', true)->select() as $setting) {
 				$this->results[$setting->name] = $setting->value;
 			}
 			Cache::set($this->results, 'get', __CLASS__, 3600);
@@ -41,7 +40,7 @@ class Setting extends Table{
 		} elseif ($auto) {
 			if (($value = Cache::get('get.' . $name, __CLASS__)) !== false) {
 
-			} elseif ($setting = $this->flush()->query('name', $name)->order('ID', 'DESC')->selectRow()) {
+			} elseif ($setting = $this->flush()->query('name', $name)->selectRow()) {
 				Cache::set($setting->value, 'get.' . $setting->name, __CLASS__, 3600);
 				$value = $setting->value;
 			} else {

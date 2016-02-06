@@ -18,7 +18,7 @@ class Access extends Table{
 
 	protected $columns = [
 		'token' => ['type' => 'string', 'length' => 16, 'primary' => 0],
-		'userID' => ['type' => 'integer', 'length' => 4, 'unsigned' => true],
+		'userID' => ['type' => 'integer', 'length' => 4, 'unsigned' => true, 'key' => ['userID' => true]],
 		'IP' => ['type' => 'string', 'length' => 40],
 		'userAgent' => ['type'=> 'string', 'length' => 255],
 		'created' => ['type' => 'timestamp'],
@@ -35,16 +35,18 @@ class Access extends Table{
 		return call_user_func_array([$this, 'getPermission'], func_get_args()) !== false;
 	}
 
-	public function getPermission() {
+	public function getPermission(array $nodes, $keys = false) {
 		return true;
 	}
+
+
 
 	public function userID() {
 		if ($this->userID === NULL) {
 			$this->userID = 0;
 			$token = $this->route->request->getToken();
 			if (!$result = $this->selectRow($token)) {
-				$this->flush()->values(['token' => $token, 'IP' => $this->route->request->getIP(), 'userAgent' => $this->route->request->getHeader('User-Agent')])->insert();
+				$this->flush()->values(['token' => $token, 'IP' => $this->route->request->getClientAddr(), 'userAgent' => $this->route->request->getHeader('User-Agent')])->insert();
 				return 0;
 			}
 

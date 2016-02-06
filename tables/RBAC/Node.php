@@ -40,7 +40,7 @@ class Node extends Table{
 
 	public function getKeys($nodeKeys, $method) {
 		if (!is_array($nodeKeys)) {
-			$nodeKeys = array_filter(explode('/', strtr($nodeKeys, '\\.', '/')));
+			$nodeKeys = array_filter(explode('/', strtr($nodeKeys, '\\.', '//')));
 		}
 
 		if (!$nodeKeys || !$method) {

@@ -36,7 +36,7 @@ class Token extends Table{
 			$this->userID = 0;
 			$token = $this->route->request->getToken();
 			if (!$result = $this->selectRow($token)) {
-				$this->flush()->values(['token' => $token, 'IP' => $this->route->request->getIP(), 'userAgent' => $this->route->request->getHeader('User-Agent')])->insert();
+				$this->flush()->values(['token' => $token, 'IP' => $this->route->request->getClientAddr(), 'userAgent' => $this->route->request->getHeader('User-Agent')])->insert();
 				return 0;
 			}
 
