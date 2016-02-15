@@ -20,7 +20,9 @@ $_SERVER['LOLI'] = require dirname(__DIR__) . '/config.php';
 require dirname(__DIR__) . '/vendor/autoload.php';
 
 
-\App\User::database();
+// \App\User::option('exists', true)->:
+// \App\Auth::drop();
+// \App\Auth::option('exists', true)->create();
 
 $route = new Route();
 $route();
