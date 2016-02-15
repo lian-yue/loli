@@ -6,6 +6,6 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
-    $vendorDir . '/loli/base/src/functions.php',
-    $vendorDir . '/loli/base/src/include.php',
+    '5ca4fb56396a83d109aa89f10dd4aeb2' => $vendorDir . '/loli/base/src/functions.php',
+    'e59676bc4372365a37591017e6dc08f4' => $vendorDir . '/loli/base/src/include.php',
 );

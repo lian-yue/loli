@@ -5,13 +5,13 @@
         "version_normalized": "9999999-dev",
         "source": {
             "type": "git",
-            "url": "https://github.com/lian-yue/loli-base.git",
-            "reference": "a38abadcc9790dbd3cade15e4e0b1f92dc374c68"
+            "url": "https://github.com/lian-yue/loli.base.git",
+            "reference": "aee2693dfc72bbeb716e00e75a622b04a5ad2679"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/lian-yue/loli-base/zipball/a38abadcc9790dbd3cade15e4e0b1f92dc374c68",
-            "reference": "a38abadcc9790dbd3cade15e4e0b1f92dc374c68",
+            "url": "https://api.github.com/repos/lian-yue/loli.base/zipball/aee2693dfc72bbeb716e00e75a622b04a5ad2679",
+            "reference": "aee2693dfc72bbeb716e00e75a622b04a5ad2679",
             "shasum": ""
         },
         "require": {
@@ -23,7 +23,7 @@
         "replace": {
             "loli": "self.version"
         },
-        "time": "2015-02-04 17:17:07",
+        "time": "2016-02-06 09:29:17",
         "type": "library",
         "installation-source": "source",
         "autoload": {
@@ -32,7 +32,7 @@
                 "src/include.php"
             ],
             "psr-4": {
-                "Loli\\": "src/Loli/"
+                "Loli\\": "src/loli/"
             }
         },
         "notification-url": "https://packagist.org/downloads/",
@@ -50,5 +50,68 @@
             "framework",
             "loli"
         ]
+    },
+    {
+        "name": "phpmailer/phpmailer",
+        "version": "v5.2.14",
+        "version_normalized": "5.2.14.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/PHPMailer/PHPMailer.git",
+            "reference": "e774bc9152de85547336e22b8926189e582ece95"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/PHPMailer/PHPMailer/zipball/e774bc9152de85547336e22b8926189e582ece95",
+            "reference": "e774bc9152de85547336e22b8926189e582ece95",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.0.0"
+        },
+        "require-dev": {
+            "phpdocumentor/phpdocumentor": "*",
+            "phpunit/phpunit": "4.7.*"
+        },
+        "suggest": {
+            "league/oauth2-client": "Needed for XOAUTH2 authentication",
+            "league/oauth2-google": "Needed for Gmail XOAUTH2"
+        },
+        "time": "2015-11-01 10:15:28",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "classmap": [
+                "class.phpmailer.php",
+                "class.phpmaileroauth.php",
+                "class.phpmaileroauthgoogle.php",
+                "class.smtp.php",
+                "class.pop3.php",
+                "extras/EasyPeasyICS.php",
+                "extras/ntlm_sasl_client.php"
+            ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "LGPL-2.1"
+        ],
+        "authors": [
+            {
+                "name": "Jim Jagielski",
+                "email": "jimjag@gmail.com"
+            },
+            {
+                "name": "Marcus Bointon",
+                "email": "phpmailer@synchromedia.co.uk"
+            },
+            {
+                "name": "Andy Prevost",
+                "email": "codeworxtech@users.sourceforge.net"
+            },
+            {
+                "name": "Brent R. Matzelle"
+            }
+        ],
+        "description": "PHPMailer is a full-featured email creation and transfer class for PHP"
     }
 ]
