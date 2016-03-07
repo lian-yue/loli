@@ -11,40 +11,77 @@
 /*
 /* ************************************************************************** */
 
-$anyString = '[\x{0020}-\x{002E}\x{0030}-\x{007F}\x{0080}-\x{02FA1F}]+';
+// $anyString = '[\x{0020}-\x{002E}\x{0030}-\x{007F}\x{0080}-\x{02FA1F}]+';
 
 return [
 
 	/*
 	[
-		'model' => ['Model', 'Method'],
+		'controller' => ['Model', 'Method'],
 		'scheme' => ['http', 'https'],
 		'method' => ['HEAD', 'GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'PURGE', 'OPTIONS', 'TRACE'],
 		'host' => 'Host:name',
 		'path' => 'install',
 		'match' => [1 => '\w+'],
 		'default' => [],
-		'filter' => function(array $params, Loli\Route $route){},
 	],*/
 
 
+	//  首页
+	[
+		'controller' => ['Home', 'index'],
+		'path' => '/',
+	],
 
 	// 安装
 	[
-		'model' => ['Install', '{1}'],
+		'controller' => ['Install', '{1}'],
 		'path' => '/install{/{1}?}/',
 	],
 
 
 	// 验证码
 	[
-		'model' => ['Captcha', '{1}'],
+		'controller' => ['Captcha', '{1}'],
+		'path' => '/captcha{/{1}?}/',
+	],
+
+
+
+	// 账号 登录注册 找回密码等
+	[
+		'controller' => ['Account', '{1}'],
+		'path' => '/account{/{1}?}/',
+	],
+	[
+		'controller' => ['Account/OAuth2', '{1}'],
+		'path' => '/account/OAuth2/{type}{/{1}?}/',
+	],
+
+
+	// 个人中心
+	[
+		'controller' => ['Profile', '{1}'],
+		'path' => '/profile{/{1}?}/',
+	],
+
+
+	/*// 安装
+	[
+		'controller' => ['Install', '{1}'],
+		'path' => '/install{/{1}?}/',
+	],
+
+
+	// 验证码
+	[
+		'controller' => ['Captcha', '{1}'],
 		'path' => '/captcha{/{1}?}/',
 	],
 
 	// 用户
 	[
-		'model' => ['User', '{1}'],
+		'controller' => ['User', '{1}'],
 		'path' => '/user{/{1}?}/',
 	],
 
@@ -54,37 +91,37 @@ return [
 
 	// 储存
 	/*[
-		'model' => ['Storage', 'index'],
+		'controller' => ['Storage', 'index'],
 		'path' => '/storage/',
 	],
 
 	[
-		'model' => ['Storage', 'item'],
+		'controller' => ['Storage', 'item'],
 		'path' => '/storage/{userID}{/{path}?}',
 		'match' => ['userID' => '\d+', 'path' => '.+'],
 	],
 
 	[
-		'model' => ['Storage', '{1}'],
+		'controller' => ['Storage', '{1}'],
 		'path' => '/storage/{1}{/{userID}?}{/{path}?}',
 		'match' => ['userID' => '\d+', 'path' => '.+'],
 	],
 
 	[
-		'model' => ['Storage', 'insert'],
+		'controller' => ['Storage', 'insert'],
 		'method' => ['PUT'],
 		'path' => '/storage{/{userID}?}{/{path}?}',
 		'match' => ['userID' => '\d+', 'path' => '.+'],
 	],
 
 	[
-		'model' => ['Storage', 'update'],
+		'controller' => ['Storage', 'update'],
 		'method' => ['PATCH'],
 		'path' => '/storage{/{userID}?}{/{path}?}',
 		'match' => ['userID' => '\d+', 'path' => '.+'],
 	],
 	[
-		'model' => ['Storage', 'delete'],
+		'controller' => ['Storage', 'delete'],
 		'method' => ['DELETE'],
 		'path' => '/storage{/{userID}?}{/{path}?}',
 		'match' => ['userID' => '\d+', 'path' => '.+'],
@@ -108,43 +145,43 @@ return [
 
 	// 百科   动漫 漫画 游戏 小说 音乐 电视剧 电影 角色 经验 教程
 	[
-		'model' => ['Wiki', 'index'],
+		'controller' => ['Wiki', 'index'],
 		'path' => '/wiki/',
 	],
 	[
-		'model' => ['Wiki', 'search'],
+		'controller' => ['Wiki', 'search'],
 		'path' => '/wiki/search/{search?}{/{page}?}/',
 		'match' => ['search' => &$anyString, 'page' => '\d+'],
 	],
 	[
-		'model' => ['Wiki', 'lists'],
+		'controller' => ['Wiki', 'lists'],
 		'path' => '/wiki/category/{category}{/{page}?}/',
 		'match' => ['category' => &$anyString],
 	],
 	[
-		'model' => ['Wiki', 'item'],
+		'controller' => ['Wiki', 'item'],
 		'path' => '/wiki/item/{item}{/{page}?}',
 		'match' => ['item' => &$anyString, 'page' => '\d+'],
 	],
 
 	[
-		'model' => ['Wiki', '{1}'],
+		'controller' => ['Wiki', '{1}'],
 		'path' => '/wiki{/{1}?}/',
 	],
 
 	[
-		'model' => ['Wiki', 'insert'],
+		'controller' => ['Wiki', 'insert'],
 		'method' => ['PUT'],
 		'path' => '/wiki/',
 	],
 
 	[
-		'model' => ['Wiki', 'update'],
+		'controller' => ['Wiki', 'update'],
 		'method' => ['PATCH'],
 		'path' => '/wiki/',
 	],
 	[
-		'model' => ['Wiki', 'delete'],
+		'controller' => ['Wiki', 'delete'],
 		'method' => ['DELETE'],
 		'path' => '/wiki/',
 	],
@@ -158,43 +195,43 @@ return [
 
 	// 新闻
 	[
-		'model' => ['News', 'index'],
+		'controller' => ['News', 'index'],
 		'path' => '/news/',
 	],
 	[
-		'model' => ['News', 'search'],
+		'controller' => ['News', 'search'],
 		'path' => '/news/search/{search}{/{page}?}/',
 		'match' => ['search' => &$anyString, 'page' => '\d+'],
 	],
 	[
-		'model' => ['News', 'lists'],
+		'controller' => ['News', 'lists'],
 		'path' => '/news/category/{category}{/{page}?}/',
 		'match' => ['category' => &$anyString, 'page' => '\d+'],
 	],
 	[
-		'model' => ['News', 'item'],
+		'controller' => ['News', 'item'],
 		'path' => '/news/item/{item}{/{page}?}/',
 		'match' => ['page' => '\d+'],
 	],
 
 	[
-		'model' => ['News', '{1}'],
+		'controller' => ['News', '{1}'],
 		'path' => '/news/{1}/',
 	],
 
 	[
-		'model' => ['News', 'insert'],
+		'controller' => ['News', 'insert'],
 		'method' => ['PUT'],
 		'path' => '/news/',
 	],
 
 	[
-		'model' => ['News', 'update'],
+		'controller' => ['News', 'update'],
 		'method' => ['PATCH'],
 		'path' => '/news/',
 	],
 	[
-		'model' => ['News', 'delete'],
+		'controller' => ['News', 'delete'],
 		'method' => ['DELETE'],
 		'path' => '/news/',
 	],
@@ -206,39 +243,39 @@ return [
 
 	// 专题
 	[
-		'model' => ['Topic', 'index'],
+		'controller' => ['Topic', 'index'],
 		'path' => '/topic/',
 	],
 	[
-		'model' => ['Topic', 'search'],
+		'controller' => ['Topic', 'search'],
 		'path' => '/topic/search/{search}{/{page}?}/',
 		'match' => ['search' => &$anyString],
 	],
 	[
-		'model' => ['Topic', 'item'],
+		'controller' => ['Topic', 'item'],
 		'path' => '/topic/item/{item}/',
 	],
 
 
 
 	[
-		'model' => ['Topic', '{1}'],
+		'controller' => ['Topic', '{1}'],
 		'path' => '/topic/{1}/',
 	],
 
 	[
-		'model' => ['Topic', 'insert'],
+		'controller' => ['Topic', 'insert'],
 		'method' => ['PUT'],
 		'path' => '/topic/',
 	],
 
 	[
-		'model' => ['Topic', 'update'],
+		'controller' => ['Topic', 'update'],
 		'method' => ['PATCH'],
 		'path' => '/topic/',
 	],
 	[
-		'model' => ['Topic', 'delete'],
+		'controller' => ['Topic', 'delete'],
 		'method' => ['DELETE'],
 		'path' => '/topic/',
 	],
@@ -257,38 +294,38 @@ return [
 
 	// 视频
 	[
-		'model' => ['Video', 'index'],
+		'controller' => ['Video', 'index'],
 		'path' => '/video/',
 	],
 	[
-		'model' => ['Video', 'search'],
+		'controller' => ['Video', 'search'],
 		'path' => '/video/search/{search}{/{page}?}/',
 		'match' => ['search' => &$anyString, 'page' => '\d+'],
 	],
 	[
-		'model' => ['Video', 'item'],
+		'controller' => ['Video', 'item'],
 		'path' => '/video/item/{item}/',
 	],
 
 
 	[
-		'model' => ['Video', '{1}'],
+		'controller' => ['Video', '{1}'],
 		'path' => '/video/{1}/',
 	],
 
 	[
-		'model' => ['Video', 'insert'],
+		'controller' => ['Video', 'insert'],
 		'method' => ['PUT'],
 		'path' => '/video/',
 	],
 
 	[
-		'model' => ['Video', 'update'],
+		'controller' => ['Video', 'update'],
 		'method' => ['PATCH'],
 		'path' => '/video/',
 	],
 	[
-		'model' => ['Video', 'delete'],
+		'controller' => ['Video', 'delete'],
 		'method' => ['DELETE'],
 		'path' => '/video/',
 	],
@@ -303,38 +340,38 @@ return [
 
 	// 文章
 	[
-		'model' => ['Text', 'index'],
+		'controller' => ['Text', 'index'],
 		'path' => '/text/',
 	],
 	[
-		'model' => ['Text', 'search'],
+		'controller' => ['Text', 'search'],
 		'path' => '/text/search/{search}{/{page}?}/',
 		'match' => ['search' => &$anyString, 'page' => '\d+'],
 	],
 	[
-		'model' => ['Text', 'item'],
+		'controller' => ['Text', 'item'],
 		'path' => '/text/item/{item}/',
 	],
 
 
 	[
-		'model' => ['Text', '{1}'],
+		'controller' => ['Text', '{1}'],
 		'path' => '/text/{1}/',
 	],
 
 	[
-		'model' => ['Text', 'insert'],
+		'controller' => ['Text', 'insert'],
 		'method' => ['PUT'],
 		'path' => '/text/',
 	],
 
 	[
-		'model' => ['Text', 'update'],
+		'controller' => ['Text', 'update'],
 		'method' => ['PATCH'],
 		'path' => '/text/',
 	],
 	[
-		'model' => ['Text', 'delete'],
+		'controller' => ['Text', 'delete'],
 		'method' => ['DELETE'],
 		'path' => '/text/',
 	],
@@ -354,37 +391,37 @@ return [
 
 	// 漫展
 	[
-		'model' => ['Event', 'index'],
+		'controller' => ['Event', 'index'],
 		'path' => '/{{location}/?}event/',
 	],
 	[
-		'model' => ['Event', 'lists'],
+		'controller' => ['Event', 'lists'],
 		'path' => '/{{location}/?}event/type/{type}/{page?}/',
 		'match' => ['location' => '[a-z]+', 'page' => '\d+'],
 	],
 	[
-		'model' => ['Event', 'item'],
+		'controller' => ['Event', 'item'],
 		'path' => '/{{location}/?}event/item/{item}/',
 		'match' => ['location' => '[a-z]+', 'item' => '\d+'],
 	],
 
 	[
-		'model' => ['Event', '{1}'],
+		'controller' => ['Event', '{1}'],
 		'path' => '/{{location}/?}event/{1}/',
 	],
 
 	[
-		'model' => ['Event', 'insert'],
+		'controller' => ['Event', 'insert'],
 		'method' => ['PUT'],
 		'path' => '/{{location}/?}event/',
 	],
 	[
-		'model' => ['Event', 'update'],
+		'controller' => ['Event', 'update'],
 		'method' => ['PATCH'],
 		'path' => '/{{location}/?}event/',
 	],
 	[
-		'model' => ['Event', 'delete'],
+		'controller' => ['Event', 'delete'],
 		'method' => ['DELETE'],
 		'path' => '/{{location}/?}event/',
 	],
@@ -399,47 +436,47 @@ return [
 
 	// 交易
 	[
-		'model' => ['Sale', 'index'],
+		'controller' => ['Sale', 'index'],
 		'path' => '/{{location}/?}sale/',
 		'match' => ['location' => '[a-z]+', 'page' => '\d+'],
 	],
 	[
-		'model' => ['Sale', 'search'],
+		'controller' => ['Sale', 'search'],
 		'path' => '/{{location}/?}sale/search/{search}/',
 		'match' => ['location' => '[a-z]+', 'search' => &$anyString],
 	],
 	[
-		'model' => ['Sale', 'lists'],
+		'controller' => ['Sale', 'lists'],
 		'path' => '/{{location}/?}sale/category/{category}/{page?}/',
 		'match' => ['location' => '[a-z]+', 'page' => '\d+'],
 	],
 	[
-		'model' => ['Sale', 'item'],
+		'controller' => ['Sale', 'item'],
 		'path' => '/{{location}/?}sale/item/{item}/',
 		'match' => ['location' => '[a-z]+', 'item' => '\d+'],
 	],
 
 
 	[
-		'model' => ['Sale', '{1}'],
+		'controller' => ['Sale', '{1}'],
 		'path' => '/{{location}/?}sale/{1}/',
 		'match' => ['location' => '[a-z]+'],
 	],
 
 	[
-		'model' => ['Sale', 'insert'],
+		'controller' => ['Sale', 'insert'],
 		'method' => ['PUT'],
 		'path' => '/{{location}/?}sale/',
 		'match' => ['location' => '[a-z]+'],
 	],
 	[
-		'model' => ['Sale', 'update'],
+		'controller' => ['Sale', 'update'],
 		'method' => ['PATCH'],
 		'path' => '/{{location}/?}sale/',
 		'match' => ['location' => '[a-z]+'],
 	],
 	[
-		'model' => ['Sale', 'delete'],
+		'controller' => ['Sale', 'delete'],
 		'method' => ['DELETE'],
 		'path' => '/{{location}/?}sale/',
 		'match' => ['location' => '[a-z]+'],
@@ -453,46 +490,46 @@ return [
 
 	// 招募 招聘 等
 	[
-		'model' => ['Job', 'index'],
+		'controller' => ['Job', 'index'],
 		'path' => '/{{location}/?}job/',
 		'match' => ['location' => '[a-z]+'],
 	],
 	[
-		'model' => ['Job', 'search'],
+		'controller' => ['Job', 'search'],
 		'path' => '/{{location}/?}job/search/{search}/',
 		'match' => ['location' => '[a-z]+', 'search' => &$anyString],
 	],
 	[
-		'model' => ['Job', 'lists'],
+		'controller' => ['Job', 'lists'],
 		'path' => '/{{location}/?}job/category/{category}/{page?}/',
 		'match' => ['location' => '[a-z]+', 'page' => '\d+'],
 	],
 	[
-		'model' => ['Job', 'item'],
+		'controller' => ['Job', 'item'],
 		'path' => '/{{location}/?}job/item/{item}/',
 		'match' => ['location' => '[a-z]+', 'item' => '\d+'],
 	],
 
 	[
-		'model' => ['Job', '{1}'],
+		'controller' => ['Job', '{1}'],
 		'path' => '/{{location}/?}job/{1}/',
 		'match' => ['location' => '[a-z]+'],
 	],
 
 	[
-		'model' => ['Job', 'insert'],
+		'controller' => ['Job', 'insert'],
 		'method' => ['PUT'],
 		'path' => '/{{location}/?}job/',
 		'match' => ['location' => '[a-z]+'],
 	],
 	[
-		'model' => ['Job', 'update'],
+		'controller' => ['Job', 'update'],
 		'method' => ['PATCH'],
 		'path' => '/{{location}/?}job/',
 		'match' => ['location' => '[a-z]+'],
 	],
 	[
-		'model' => ['Job', 'delete'],
+		'controller' => ['Job', 'delete'],
 		'method' => ['DELETE'],
 		'path' => '/{{location}/?}job/',
 		'match' => ['location' => '[a-z]+'],
@@ -503,46 +540,46 @@ return [
 
 	// 图片 cosplay 图片  漫展反图
 	[
-		'model' => ['Image', 'index'],
+		'controller' => ['Image', 'index'],
 		'path' => '/{{location}/?}image/',
 		'match' => ['location' => '[a-z]+'],
 	],
 	[
-		'model' => ['Image', 'search'],
+		'controller' => ['Image', 'search'],
 		'path' => '/{{location}/?}image/search/{search}/',
 		'match' => ['location' => '[a-z]+', 'search' => &$anyString],
 	],
 	[
-		'model' => ['Image', 'lists'],
+		'controller' => ['Image', 'lists'],
 		'path' => '/{{location}/?}image/category/{category}/{page?}/',
 		'match' => ['location' => '[a-z]+', 'page' => '\d+'],
 	],
 	[
-		'model' => ['Image', 'item'],
+		'controller' => ['Image', 'item'],
 		'path' => '/{{location}/?}image/item/{item}/',
 		'match' => ['location' => '[a-z]+', 'item' => '\d+'],
 	],
 
 	[
-		'model' => ['Image', '{1}'],
+		'controller' => ['Image', '{1}'],
 		'path' => '/{{location}/?}image/{1}/',
 		'match' => ['location' => '[a-z]+'],
 	],
 
 	[
-		'model' => ['Image', 'insert'],
+		'controller' => ['Image', 'insert'],
 		'method' => ['PUT'],
 		'path' => '/{{location}/?}image/',
 		'match' => ['location' => '[a-z]+'],
 	],
 	[
-		'model' => ['Image', 'update'],
+		'controller' => ['Image', 'update'],
 		'method' => ['PATCH'],
 		'path' => '/{{location}/?}image/',
 		'match' => ['location' => '[a-z]+'],
 	],
 	[
-		'model' => ['Image', 'delete'],
+		'controller' => ['Image', 'delete'],
 		'method' => ['DELETE'],
 		'path' => '/{{location}/?}image/',
 		'match' => ['location' => '[a-z]+'],
@@ -564,12 +601,12 @@ return [
 
 	// 社团
 	[
-		'model' => ['Group', 'id'],
+		'controller' => ['Group', 'id'],
 		'path' => '/{{location}/?}group/id{id}/',
 		'match' => ['location' => '[a-z]+', 'id' => '\d+'],
 	],
 	[
-		'model' => ['Group', 'index'],
+		'controller' => ['Group', 'index'],
 		'path' => '{{location}/?}group/{type?}/{page?}/',
 		'match' => ['location' => '[a-z]+', 'type' => '[a-z]+', 'page' => '\d+'],
 	],
@@ -581,12 +618,12 @@ return [
 
 	// 圈子 (动态)
 	[
-		'model' => ['Circle', 'id'],
+		'controller' => ['Circle', 'id'],
 		'path' => '/{{location}/?}circle/id{id}/',
 		'match' => ['location' => '[a-z]+', 'id' => '\d+'],
 	],
 	[
-		'model' => ['Circle', 'index'],
+		'controller' => ['Circle', 'index'],
 		'path' => '{{location}/?}circle/{type?}/{page?}/',
 		'match' => ['location' => '[a-z]+', 'type' => '[a-z]+', 'page' => '\d+'],
 	],
@@ -597,7 +634,7 @@ return [
 
 	// 个人空间
 	[
-		'model' => ['Space', '{type?}'],
+		'controller' => ['Space', '{type?}'],
 		'path' => '/space/id{id}/{type?}/',
 		'match' => ['id' => '\d+', 'type' => 'a-z+'],
 	],
@@ -607,27 +644,27 @@ return [
 
 
 	// 管理员
-	[
-		'model' => ['Admin{/{1}?}', '{2}'],
+	/*[
+		'controller' => ['Admin{/{1}?}', '{2}'],
 		'path' => 'Admin{/{1}?}{/{2}?}/',
 		'match' => [1 => '[A-Z][0-9A-Za-z_/]*?',2 => '[a-z][A-Za-z0-9]*'],
 	],
 	[
-		'model' => ['Admin{/{1}?}', 'insert'],
+		'controller' => ['Admin{/{1}?}', 'insert'],
 		'method' => ['PUT'],
 		'path' => 'Admin{/{1}?}/',
 		'match' => [1 => '[A-Z][0-9A-Za-z_/]*?'],
 	],
 	[
-		'model' => ['Admin{/{1}?}', 'update'],
+		'controller' => ['Admin{/{1}?}', 'update'],
 		'method' => ['PATCH'],
 		'path' => 'Admin{/{1}?}/',
 		'match' => [1 => '[A-Z][0-9A-Za-z_/]*?'],
 	],
 	[
-		'model' => ['Admin{/{1}?}', 'delete'],
+		'controller' => ['Admin{/{1}?}', 'delete'],
 		'method' => ['DELETE'],
 		'path' => 'Admin{/{1}?}/',
 		'match' => [1 => '[A-Z][0-9A-Za-z_/]*?'],
-	],
+	],*/
 ];

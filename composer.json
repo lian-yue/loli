@@ -11,13 +11,16 @@
         }
     ],
     "require": {
-        "loli/base": "*"
+        "loli/base": "*@dev",
+        "phpmailer/phpmailer": "^5.2",
+        "intervention/image": "^2.3",
+        "google/apiclient": "^1.1",
+        "abraham/twitteroauth": "^0.6.2",
+        "facebook/php-sdk-v4": "^5.1"
     },
      "autoload": {
         "psr-4": {
-            "Model\\": "models/",
-            "Table\\": "tables/",
-            "\\": "libraries/",
+            "App\\": "app/"
         }
     }
 }
