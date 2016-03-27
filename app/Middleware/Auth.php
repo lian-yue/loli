@@ -31,7 +31,7 @@ class Auth extends AbstractMiddleware{
 		if ($this->login && $this->login >= 0) {
 			// 必须登录
 			if (!Route::user()->id) {
-				throw new Message(['message' => 'auth_login', 'name' => 'Auth'], 401, [], new Uri(['Account', 'login'], ['redirect' => Route::request()->getUri()]), 0);
+				throw new Message(['message' => 'auth_login', 'name' => 'Auth'], 401, [], new Uri(['Account', 'login'], ['redirect_uri' => Route::request()->getUri()]), 0);
 			}
 		} elseif ($this->login !== null) {
 			// 必须未登录

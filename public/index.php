@@ -18,20 +18,27 @@ use Loli\Http\Message\ResponseOutput;
 if (!empty($_SERVER['REQUEST_URI']) && in_array(strtolower($_SERVER['REQUEST_URI']), ['/favicon.ico', '/crossdomain.xml', '/robots.txt'], true)) {
 	exit;
 }
-
 require dirname(__DIR__) . '/vendor/autoload.php';
-$_SERVER['LOLI'] = require dirname(__DIR__) . '/config.php';
+
+// echo \App\Auth::option('exists', true)->create();
+// echo \App\Auth\Node::option('exists', true)->create();
+// echo \App\Auth\Role::option('exists', true)->create();
+// echo \App\Auth\Permission::option('exists', true)->create();
+// echo \App\Auth\Pelationship::option('exists', true)->create();
+//
+// echo \App\User::option('exists', true)->create();
+// echo \App\User\Log::option('exists', true)->create();
+// echo \App\User\Code::option('exists', true)->create();
+// echo \App\User\Profile::option('exists', true)->create();
+//
+// die;
+
 
 
 $route = new Route();
 $route->run();
 $responseOutput = new ResponseOutput($route->response, $route->request);
 $responseOutput->send();
-
-
-
-
-
 
 
 

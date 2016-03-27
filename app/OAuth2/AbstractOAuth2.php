@@ -3,6 +3,7 @@ namespace App\OAuth2;
 
 use Loli\Uri;
 use Loli\Route;
+use Loli\Session;
 
 abstract class AbstractOAuth2{
 
@@ -21,7 +22,7 @@ abstract class AbstractOAuth2{
 
 
 
-	abstract public function getRedirect();
+	abstract public function getRedirectUri();
 
 	abstract public function isAuthorize();
 
@@ -50,6 +51,18 @@ abstract class AbstractOAuth2{
 		$class = explode('\\', $class);
 		return end($class);
 	}
+
+
+    protected function getState($new = false) {
+        $item = Session::getItem('oauth2_state_' . $this->getType());
+        if ($new) {
+            $state = md5(uniqid(mt_rand(), true));
+            $item->set($state)->expiresAfter(3600);
+            Session::save($item);
+            return $state;
+        }
+        return $item->get();
+    }
 
 
 	protected function getOption(array $default = []) {

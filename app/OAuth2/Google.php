@@ -15,7 +15,7 @@ namespace App\OAuth2;
 class Google extends AbstractOAuth2{
 
 
-	public function getRedirect() {
+	public function getRedirectUri() {
 		return $this->client->createAuthUrl();
 	}
 
@@ -82,17 +82,24 @@ class Google extends AbstractOAuth2{
 			'client_id' => '',
 			'client_secret' => '',
 			'api_key' => '',
+			'scope' => [],
 			'scopes' => ['https://www.googleapis.com/auth/plus.login', 'https://www.googleapis.com/auth/userinfo.email', 'https://www.googleapis.com/auth/userinfo.profile'],
 		]);
-		if (!is_array($option['scopes'])) {
-			$option['scopes'] = explode(',', $option['scopes']);
+        if ($option['scope']) {
+            $scopes = $option['scope'];
+        } else {
+            $scopes = $option['scopes'];
+        }
+		if (!is_array($scopes)) {
+			$scopes = explode(',', $scopes);
 		}
-		$option['scopes'] = implode(' ', array_map('trim', $option['scopes']));
+		$scopes = implode(' ', array_map('trim', $scopes));
+
 		$client = new \Google_Client();
 		$client->setClientId($option['client_id']);
 		$client->setClientSecret($option['client_secret']);
 		$client->setDeveloperKey($option['api_key']);
-		$client->setScopes($option['scopes']);
+		$client->setScopes($scopes);
 		$client->setRedirectUri($this->getCallbackUri());
 		return $client;
 	}

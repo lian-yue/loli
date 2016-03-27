@@ -114,7 +114,7 @@ class Account extends Controller{
 		'lostPassword' => null,
 	];
 
-	protected $OAuth2Types = [
+	protected $oauth2Types = [
 		'google' => 'Google',
 		'facebook' => 'Facebook',
 		'twitter' => 'Twitter',
@@ -511,21 +511,21 @@ class Account extends Controller{
 
 
 	// 重定向到登陆页面
-	public function OAuth2(array $params) {
+	public function oauth2(array $params) {
 		$class = $this->getOAuth2Class($params);
-		$item = Session::getItem('OAuth2_' . $class->getType());
+		$item = Session::getItem('oauth2_' . $class->getType());
 		$params = to_array($params);
 		$item->set($params)->expiresAfter(3600);
 		Session::save($item);
-		throw new Message('redirect', 302, ['redirect' => $class->getRedirect()], true, 0);
+		throw new Message('redirect', 302, ['redirect_uri' => $class->getRedirectUri()], true, 0);
 	}
 
 
-	public function OAuth2Callback(array $params) {
+	public function oauth2Callback(array $params) {
 		$class = $this->getOAuth2Class($params);
 
 		// 附加参数
-		$item = Session::getItem('OAuth2_' . $class->getType());
+		$item = Session::getItem('oauth2_' . $class->getType());
 		if (is_array($item->get())) {
 			$params += $item->get();
 		}
@@ -533,19 +533,19 @@ class Account extends Controller{
 		if (Route::csrf()) {
 			if (!$class->isAuthorize()) {
 				// 验证失败 取消登陆等
-				if (empty($params['redirect'])) {
-					$redirect = new Uri(['Profile', 'index']);
+				if (empty($params['redirect_uri'])) {
+					$redirectUri = new Uri(['Profile', 'index']);
 				} else {
-					$redirect = $params['redirect'];
+					$redirectUri = $params['redirect_uri'];
 				}
-				throw new Message('redirect', 302, [], $redirect, 0);
+				throw new Message('redirect', 302, [], $redirectUri, 0);
 			}
 		} else {
-			$item = Session::getItem('OAuth2_ID_' . $class->getType());
+			$item = Session::getItem('oauth2_id_' . $class->getType());
 			if (is_array($item->get())) {
 				$class->setAccessToken($item->get());
 			} else {
-				throw new Message('redirect', 302, ['redirect' => $class->getRedirect()], true, 0);
+				throw new Message('redirect', 302, ['redirect_uri' => $class->getRedirectUri()], true, 0);
 			}
 		}
 
@@ -557,14 +557,14 @@ class Account extends Controller{
 			throw new \RuntimeException('User id is empty');
 		}
 
-		if (empty($params['redirect'])) {
-			$redirect = new Uri(['Profile', 'index']);
+		if (empty($params['redirect_uri'])) {
+			$redirectUri = new Uri(['Profile', 'index']);
 		} else {
-			$redirect = $params['redirect'];
+			$redirectUri = $params['redirect_uri'];
 		}
 
 
-		$type = 'oauth_' . $class->getType();
+		$type = 'oauth2_' . $class->getType();
 
 
 		// 已登陆添加进绑定
@@ -586,7 +586,7 @@ class Account extends Controller{
 			$profile->insert();
 
 
-			throw new Message('redirect', 302, [], $redirect, 0);
+			throw new Message('redirect', 302, [], $redirectUri, 0);
 		}
 
 
@@ -602,7 +602,7 @@ class Account extends Controller{
 			$user->select();
 			$this->loginAuth($user, 86400 * 7, implode(',', 'OAuth2-' . $profile->id));
 
-			throw new Message('redirect', 302, [], $redirect, 0);
+			throw new Message('redirect', 302, [], $redirectUri, 0);
 		}
 
 
@@ -709,17 +709,17 @@ class Account extends Controller{
 			$this->loginAuth($user, 86400 * 7, implode(',', 'OAuth2-' . $oauth2Profile->id));
 
 			// 登陆后
-			throw new Message('redirect', 302, [], $redirect, 0);
+			throw new Message('redirect', 302, [], $redirectUri, 0);
 		}
 
 
 
-		$item = Session::getItem('OAuth2_ID_' . $class->getType());
+		$item = Session::getItem('oauth2_id_' . $class->getType());
 		$item->set($class->getAccessToken())->expiresAfter(3600);
 		Session::save($item);
 
-		$redirectOAuth2 = new Uri(['Account', 'OAuth2Callback'], ['type' => $class->getType(), '_token' => Route::token()->get(), 'redirect' => $redirect]);
-		$redirectCreate = new Uri(['Account', 'create'],  ['redirect' => $redirectOAuth2] + $userInfo);
+		$redirectOAuth2 = new Uri(['Account', 'oauth2Callback'], ['type' => $class->getType(), '_token' => Route::token()->get(), 'redirect_uri' => $redirectUri]);
+		$redirectCreate = new Uri(['Account', 'create'],  ['redirect_uri' => $redirectOAuth2] + $userInfo);
 
 		// 转到
 		throw new Message('redirect', 302, [], $redirectCreate, 0);
@@ -860,10 +860,10 @@ class Account extends Controller{
 
 
 	protected function getOAuth2Class(array &$params) {
-		if (empty($params['type']) || !is_string($params['type']) || empty($this->OAuth2Types[$params['type']])) {
+		if (empty($params['type']) || !is_string($params['type']) || empty($this->oauth2Types[$params['type']])) {
 			throw new Message(['message' => 'validator_exists', 'title' => Locale::translate('Type'), 'name' => 'type'], 50);
 		}
-		$class = 'App\OAuth2\\' . $this->OAuth2Types[$params['type']];
+		$class = 'App\OAuth2\\' . $this->oauth2Types[$params['type']];
 		return new $class($params);
 	}
 }

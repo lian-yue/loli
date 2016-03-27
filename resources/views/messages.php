@@ -1,4 +1,5 @@
 <?php
+use Loli\Locale;
 /* ************************************************************************** */
 /*
 /*	Lian Yue
@@ -11,15 +12,15 @@
 /*
 /* ************************************************************************** */
 ?><!DOCTYPE html>
-<html lang="<?=$localize->getLanguage()?>">
+<html lang="<?=Locale::getLanguage() ?>">
 	<head>
 		<meta charset="UTF-8" />
-		<?php if ($refresh >= 0 && is_string($redirect)): ?>
-		<!-- <meta http-equiv="refresh" content="<?=$refresh; ?>;URL=<?=$redirect; ?>" /> -->
+		<?php if ($this['redirect_uri']): ?>
+		<!-- <meta http-equiv="refresh" content="<?=$this['refresh']; ?>;URL=<?=$this['redirect_uri']; ?>" /> -->
 		<?php endif; ?>
 		<meta name="robots" content="none" />
 		<meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
-		<title><?=$localize->translate('Messages') ?></title>
+		<title><?=('Messages') ?></title>
 		<style type="text/css">
 			*{padding:0; margin:0;}
 			html{background: #f9f9f9;}
@@ -63,15 +64,14 @@
 	</head>
 	<body>
 		<div id="messages">
-			<?php foreach($messages as $message): ?>
-			<div class="message message-type-<?=$message->getType()?>" code="<?=$message->getCode()?>" type="<?=$message->getType()?>"><?=$message->getMessage()?></div>
+			<?php foreach($this['messages'] as $message): ?>
+				<?=$message ?>
 			<?php endforeach; ?>
 		</div>
-		<?php if ($redirect): ?>
+		<?php if ($this['redirect_uri']): ?>
 			<div id="redirect-box">
-				<a id="redirect" href="<?=$redirect === true ? 'javascript:history.back()' : $redirect; ?>"><?=$localize->translate(['Automatic return after $1 seconds', '<strong id="refresh">'. $refresh .'</strong>']) ?></a>
+				<a id="redirect" href="<?=$this['redirect_uri']?>"><?=Locale::translate(['Automatic return after {1} seconds', '<strong id="refresh">'. $this['refresh'] .'</strong>']) ?></a>
 			</div>
 		<?php endif; ?>
-		<?=$this->processing() ?>
 	</body>
 </html>

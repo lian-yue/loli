@@ -7,7 +7,7 @@ class Twitter extends AbstractOAuth2{
 
 	protected $accessToken =[];
 
-	public function getRedirect() {
+	public function getRedirectUri() {
 		$requestToken = $this->client->oauth('oauth/request_token', ['oauth_callback' => $this->getCallbackUri()]);
 		$item = Session::getItem('oauth2_twitter_request_token');
 		$item->set($requestToken)->expiresAfter(3600);

@@ -45,7 +45,7 @@ class RateLimit extends AbstractMiddleware{
 	}
 
 	public function request(array &$params) {
-
+        return;
 		$key = strtolower(implode('/', Route::controller())) . '.' . $this->limit . '.' . $this->reset;
 
 

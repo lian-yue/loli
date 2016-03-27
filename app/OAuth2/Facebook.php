@@ -6,15 +6,22 @@ use Facebook\Authentication\AccessToken;
 
 class Facebook extends AbstractOAuth2 {
 
-	public function getRedirect() {
+	public function getRedirectUri() {
 		$option = $this->getOption([
+			'scope' => [],
 			'scopes' => [],
 		]);
-		if (!is_array($option['scopes'])) {
-			$option['scopes'] = explode(',', $option['scopes']);
+        if ($option['scope']) {
+            $scopes = $option['scope'];
+        } else {
+            $scopes = $option['scopes'];
 		}
-		$option['scopes'] = array_map('trim', $option['scopes']);
-		return $this->client->getRedirectLoginHelper()->getLoginUrl($this->getCallbackUri(), $option['scopes']);
+        if (!is_array($scopes)) {
+            $scopes = explode(',', $scopes);
+        }
+		$scopes = array_map('trim', $scopes);
+
+		return $this->client->getRedirectLoginHelper()->getLoginUrl($this->getCallbackUri(), $scopes);
 	}
 
 

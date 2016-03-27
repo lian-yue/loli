@@ -156,7 +156,7 @@ class Profile extends Controller {
 				$profile->insert();
 				break;
 			default:
-				throw new Message('redirect', 302, [], new Uri(['Account/OAuth2', 'login'], ['type' => substr($params['type'], 0, -7), '_token' => Route::token()->get(), 'redirect' => new Uri(['Profile', 'bind'])]), 0);
+				throw new Message('redirect', 302, [], new Uri(['Account/OAuth2', 'login'], ['type' => substr($params['type'], 0, -7), '_token' => Route::token()->get(), 'redirect_uri' => new Uri(['Profile', 'bind'])]), 0);
 		}
 	}
 
