@@ -20,7 +20,6 @@ use Loli\Model;
 use Loli\DateTime;
 use Loli\Database\Results;
 
-
 class Auth extends Model{
 	protected static $table = 'auths';
 
@@ -92,18 +91,19 @@ class Auth extends Model{
 			if ($role->status != 1 || ($role->expired && $role->expired < $this->now)) {
 				continue;
 			}
-			if ($role = Role::selectRow($role->role_id)) {
+			if ($role = Role::selectOne($role->role_id)) {
 				$roles[] = $role;
 			} else {
 				$role->delete();
 			}
 		}
 		if (!$roles) {
-			$roles[] = Role::selectRow(1);
+			$roles[] = Role::selectOne(1);
 		}
 
 		return $this->roles = new Results(self::_roles($roles));
 	}
+
 
 
 
@@ -137,7 +137,7 @@ class Auth extends Model{
 		if ($include) {
 			$roles = [];
 			foreach($include as $id) {
-				if (!$id || isset($exists[$id]) || !($role = Role::selectRow($id))) {
+				if (!$id || isset($exists[$id]) || !($role = Role::selectOne($id))) {
 					continue;
 				}
 				$roles[] = $role;

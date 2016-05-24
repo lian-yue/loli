@@ -32,37 +32,39 @@ class User extends Model{
 
 	protected static $rules = [
 		['name' => 'id', 'type' => 'number', 'min' => 1, 'required' => true],
-		['name' => 'username', 'type' => 'text', 'required' => true, 'minlength' => 3, 'maxlength' => 32],
+		['name' => 'username', 'type' => 'text', 'trim' => true, 'required' => true, 'minlength' => 3, 'maxlength' => 32, 'pattern' => '^[0-9a-zA-Z_\-. \p{Han}\p{Hiragana}\p{Katakana}\{Hangul}]+$'],
 		['name' => 'password', 'type' => 'password', 'required' => true, 'minlength' => 6, 'maxlength' => 32],
 
 
-		['name' => 'account', 'type' => 'text', 'required' => true, 'maxlength' => 128],
+		['name' => 'account', 'type' => 'text', 'required' => true, 'maxlength' => 128, 'placeholder' => 'Please enter your username or email'],
 		['name' => 'password_again', 'type' => 'password', 'required' => true, 'maxlength' => 32],
 
 		['name' => 'old_password', 'type' => 'password', 'required' => true, 'maxlength' => 32],
 		['name' => 'new_password', 'type' => 'password', 'required' => true, 'minlength' => 6, 'maxlength' => 32],
-		['name' => 'new_password_again', 'type' => 'password', 'required' => true, 'maxlength' => 32, 'title' => 'Password again'],
+		['name' => 'new_password_again', 'type' => 'password', 'required' => true, 'maxlength' => 32],
 
+
+		['name' => 'avatar', 'type' => 'file', 'accept' => 'image/png,image/jpeg,image/bmp,image/webp,image/gif', 'size' => '4 MB', 'required' => true],
 
 		['name' => 'nickname', 'type' => 'text', 'maxlength' => 32],
 		['name' => 'description', 'type' => 'text', 'maxlength' => 128],
-		['name' => 'gender', 'type' => 'select', 'option' => ['' => 'Other', 'male' => 'Male', 'female' => 'Female'], 'required' => true],
-		['name' => 'birthday', 'type' => 'date', 'min' => '1900-01-01', 'max' => '2016-01-01', 'required' => true],
+        ['name' => 'birthday', 'type' => 'date', 'min' => '1900-01-01', 'max' => '2016-01-01'],
+		['name' => 'gender', 'type' => 'radio', 'option' => ['' => 'Secrecy', 'male' => 'Male', 'female' => 'Female']],
 
 
 		['name' => 'timezone', 'type' => 'select'],
 		['name' => 'language', 'type' => 'select'],
 
 
-		['name' => 'email', 'type' => 'email', 'required' => true, 'maxlength' => 64, 'examine' => true],
-		['name' => 'phone', 'type' => 'tel', 'required' => true, 'examine' => true],
+		['name' => 'email', 'type' => 'email', 'required' => false, 'maxlength' => 64, 'examine' => true],
+		['name' => 'phone', 'type' => 'tel', 'required' => false, 'examine' => true],
 	];
 
 
  	public static $profiles = [
 		'nickname' => '',
 		'description' => '',
-		'gender' => 'secrecy',
+		'gender' => '',
 		'birthday' => '',
 		'language' => '',
 		'timezone' => '',
@@ -85,5 +87,4 @@ class User extends Model{
 				parent::__set($name, $value);
 		}
 	}
-
 }

@@ -8,6 +8,7 @@ class Mail extends Service{
 
 	protected static function register(array $config, $group = null) {
 		$mail = new \PHPMailer(true);
+        $mail->CharSet = "utf-8";
 		$array = [
 			'host' > 'Host',
 			'hostname' > 'Host',

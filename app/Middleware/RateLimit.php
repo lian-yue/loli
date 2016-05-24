@@ -20,42 +20,43 @@ use Loli\AbstractMiddleware;
 
 class RateLimit extends AbstractMiddleware{
 
+    protected $ip = false;
+
+    protected $token = false;
+
+    protected $user = false;
+
+    protected $params = [];
+
 	protected $limit = 60;
 
 	protected $reset = 1800;
 
-	protected $bind = ['ip', 'token'];
-
 	protected $success = false;
-
-	private $ip;
-
-	private $token;
-
-	private $cache;
 
 	private $items = [];
 
-	public function __construct(array $config) {
-		parent::__construct($config);
-
-		$this->ip = Route::ip();
-		$this->token = Route::token()->get();
-		$this->cache = Cache::rateLimit();
-	}
-
 	public function request(array &$params) {
-        return;
 		$key = strtolower(implode('/', Route::controller())) . '.' . $this->limit . '.' . $this->reset;
 
-
 		$keys = [];
-		foreach ($this->bind as $bind) {
-			if (in_array($bind, ['ip', 'token'], true)) {
-				$keys[] = $this->$bind . $key;
+		foreach (['ip' => [Route::ip(), 'IP'], 'token' => [Route::token()->get(), 'Token'], 'user' => [Route::auth()->user_id, 'User']] as $name => $value) {
+			if ($this->$name) {
+				$keys[md5(json_encode([$name, $value[0], $key]))] =  $value[1];
 			}
 		}
-		$this->items = $this->cache->getItems($keys);
+
+        foreach($this->params as $name => $value) {
+            if (!isset($params[$name])) {
+                $params[$name] = '';
+            }
+            foreach ((array) $value as $callback) {
+                $params[$name] = call_user_func($callback, $params[$name]);
+            }
+            $keys[md5(json_encode(['_'. $name, $params[$name], $key]))] =  $name;
+        }
+
+		$this->items = $this->cache()->getItems(array_keys($keys));
 
 		$current = false;
 		foreach ($this->items as $item) {
@@ -68,7 +69,6 @@ class RateLimit extends AbstractMiddleware{
 			return;
 		}
 
-
 		Route::response(
 			Route::response()->withHeader('X-RateLimit-Limit', $this->limit)
 			->withHeader('X-RateLimit-Remaining', max(0, $this->limit - $current->get()))
@@ -80,7 +80,7 @@ class RateLimit extends AbstractMiddleware{
 			$datetime = new DateTime('now');
 			$datetime->setTimestamp($current->getExpiresAt());
 			$datetime2 = new DateTime('now');
-			throw new Message(['message' => 'rate_limit', 'diff' => $datetime->formatDiff($datetime2)], 403);
+			throw new Message(['message' => 'rate_limit', 'diff' => $datetime->formatDiff($datetime2), 'name' => $keys[$current->getKey()]], 403);
 		}
 
 		if (!$this->success) {
@@ -94,6 +94,10 @@ class RateLimit extends AbstractMiddleware{
 		}
 	}
 
+	protected function cache() {
+        return Cache::rateLimit();
+    }
+
 	protected function incr() {
 		foreach($this->items as $item) {
 			if (!$item->isHit()) {
@@ -104,8 +108,7 @@ class RateLimit extends AbstractMiddleware{
 			} else {
 				$item->set($item->get() + 1);
 			}
-			$this->cache->save($item);
+			$this->cache()->save($item);
 		}
 	}
-
 }

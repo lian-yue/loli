@@ -25,4 +25,24 @@ return [
 		'consumer_key' => 'YK1JUd2MplmcRRpVKfiQ',
 		'consumer_secret' => 'xMJoAsHN3nAffCJBMUZ499D9l7b645mpQuMs9P40I',
 	],
+
+
+    'qq' => [
+        'client_id' => '201432',
+		'client_secret' => '0bd62527def486c0b2ab777c7fa86048',
+        'scopes' => [],
+    ],
+
+
+    'baidu' => [
+        'client_id' => '6KNG8RjYtLB121LwGSXaEtDg',
+		'client_secret' => 'ce1HxwH1AUrcs2bn9KpexSKoy9qbGkNy',
+        'scopes' => ['basic', 'email'],
+    ],
+
+    'weibo' => [
+        'client_id' => '3922125458',
+		'client_secret' => '3e79a4baa21b83f5ed6db00b9b98ef7a',
+        'scopes' => ['all'],
+    ],
 ];

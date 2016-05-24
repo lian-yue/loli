@@ -1,0 +1,157 @@
+#c-account{
+    @max-width: 480px;
+    max-width: @max-width;
+    font-weight: 300;
+    padding: 0 1.6em 1.6em 1.6em;
+    margin: 4em auto 0 auto;
+    @media (max-width: @max-width) {
+        margin-top: 1em;
+    }
+
+    .box {
+        border-radius: 6px;
+        .box-content {
+            padding:15px 20px;
+        }
+    }
+
+    .form-control,
+    .btn
+    {
+        height: 44px;
+        font-size: 16px;
+        padding: 10px 12px;
+    }
+    .btn {
+        padding: 10px 15px;
+     }
+    .btn-group, .datepicker-birthday {
+        display: block;
+    }
+
+    h1 {
+        text-align: center;
+        padding: 0;
+        margin: 0;
+        line-height: 2.2;
+        font-size: 1.8em;
+        font-weight: normal;
+        border-bottom: solid 1px #f2f2f2;
+    }
+
+    [name="remember"] {
+        margin-right: .2em;
+    }
+
+    .select-empty {
+        font-size: 18px;
+        line-height: 2;
+        font-weight: bold;
+        text-align: center;
+    }
+
+    img.captcha {
+        margin-top: 25px;
+    	border: 1px solid #ccc;
+        width: auto;
+        height: 44px;
+        cursor: pointer;
+    }
+    #menu {
+        margin: 0;
+        padding: 0;
+        .clearfix();
+        ul {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+            li {
+                font-size: 16px;
+                list-style: none;
+                width: 50%;
+                float: left;
+                text-align: center;
+            }
+        }
+    }
+
+
+
+
+
+    #oauth2 {
+        margin: 0;
+        padding: 0;
+        h2 {
+            text-align: center;
+            line-height: 2.2;
+            font-size: 1.3em;
+        }
+        ul {
+            .clearfix();
+            margin: 0;
+            padding: 0;
+            list-style: none;
+            li {
+                list-style: none;
+                width: 49%;
+                float: left;
+                margin:0 2% 2% 0;
+                &:nth-child(even) {
+                    margin-right: 0;
+                }
+                @media (max-width: @max-width) {
+                    float: none;
+                    margin-right: 0;
+                    width:100%;
+                }
+                i {
+                	margin-right: .6em;
+                	width: 2em;
+                	line-height: 2em;
+                	font-size: 1.2em;
+                	text-align: center;
+                	border-right: 1px solid rgba(0,0,0,0.2);
+                }
+                a {
+
+                    .transition(all 0.2s);
+                    display: block;
+                    color: #fff;
+                    border-color: rgba(0,0,0,0.2);
+                    border-radius: 3px;
+                    .oauth-background(@color) {
+                        background-color: @color;
+                        &:hover{
+                            background-color: lighten(@color, -10);
+                        }
+                    }
+                    &.oauth2-google {
+                        .oauth-background(#dd4b39);
+                    }
+                    &.oauth2-facebook {
+                        .oauth-background(#3b5998);
+                    }
+                    &.oauth2-twitter {
+                        .oauth-background(#55acee);
+                    }
+                    &.oauth2-qq {
+                        .oauth-background(#00B5FA);
+                    }
+                    &.oauth2-baidu {
+                        .oauth-background(#2319DC);
+                    }
+                    &.oauth2-weibo {
+                        .oauth-background(#E6162D);
+                    }
+
+                    &:active,
+                    &:focus,
+                    &:hover {
+                        text-decoration: none;
+                    }
+                }
+            }
+        }
+    }
+}

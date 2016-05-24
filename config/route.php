@@ -13,6 +13,8 @@
 
 // $anyString = '[\x{0020}-\x{002E}\x{0030}-\x{007F}\x{0080}-\x{02FA1F}]+';
 
+
+
 return [
 
 	/*
@@ -25,6 +27,8 @@ return [
 		'match' => [1 => '\w+'],
 		'default' => [],
 	],*/
+
+
 
 
 	//  首页
@@ -66,6 +70,53 @@ return [
 	],
 
 
+
+
+
+
+    // 存储
+	[
+		'controller' => ['Folder', 'temporary'],
+		'path' => '/folder/temporary',
+	],
+
+
+    [
+		'controller' => ['Folder', 'get'],
+		'path' => '{username}/folder{/{id_code}?}',
+        'method' => ['GET'],
+        'match' => ['username' => '[0-9a-zA-Z_\-. \p{Han}\p{Hiragana}\p{Katakana}\{Hangul}]{3,32}'],
+	],
+	[
+		'controller' => ['Folder', 'post'],
+		'path' => '{username}/folder{/{id_code}?}',
+        'method' => ['POST'],
+        'match' => ['username' => '[0-9a-zA-Z_\-. \p{Han}\p{Hiragana}\p{Katakana}\{Hangul}]{3,32}'],
+	],
+
+    [
+		'controller' => ['Folder', 'put'],
+		'path' => '/{username}/folder{/{id_code}?}',
+        'method' => ['PUT'],
+        'match' => ['username' => '[0-9a-zA-Z_\-. \p{Han}\p{Hiragana}\p{Katakana}\{Hangul}]{3,32}'],
+	],
+    [
+		'controller' => ['Folder', 'patch'],
+		'path' => '/{username}/folder{/{id_code}?}',
+        'method' => ['PATCH'],
+        'match' => ['username' => '[0-9a-zA-Z_\-. \p{Han}\p{Hiragana}\p{Katakana}\{Hangul}]{3,32}'],
+	],
+    [
+		'controller' => ['Folder', 'delete'],
+		'path' => '/{username}/folder{/{id_code}?}',
+        'method' => ['DELETE'],
+        'match' => ['username' => '[0-9a-zA-Z_\-. \p{Han}\p{Hiragana}\p{Katakana}\{Hangul}]{3,32}'],
+	],
+
+
+
+
+
 	/*// 安装
 	[
 		'controller' => ['Install', '{1}'],
@@ -91,39 +142,39 @@ return [
 
 	// 储存
 	/*[
-		'controller' => ['Storage', 'index'],
-		'path' => '/storage/',
+		'controller' => ['Folder', 'index'],
+		'path' => '/folder/',
 	],
 
 	[
-		'controller' => ['Storage', 'item'],
-		'path' => '/storage/{userID}{/{path}?}',
+		'controller' => ['Folder', 'item'],
+		'path' => '/folder/{userID}{/{path}?}',
 		'match' => ['userID' => '\d+', 'path' => '.+'],
 	],
 
 	[
-		'controller' => ['Storage', '{1}'],
-		'path' => '/storage/{1}{/{userID}?}{/{path}?}',
+		'controller' => ['Folder', '{1}'],
+		'path' => '/folder/{1}{/{userID}?}{/{path}?}',
 		'match' => ['userID' => '\d+', 'path' => '.+'],
 	],
 
 	[
-		'controller' => ['Storage', 'insert'],
+		'controller' => ['Folder', 'insert'],
 		'method' => ['PUT'],
-		'path' => '/storage{/{userID}?}{/{path}?}',
+		'path' => '/folder{/{userID}?}{/{path}?}',
 		'match' => ['userID' => '\d+', 'path' => '.+'],
 	],
 
 	[
-		'controller' => ['Storage', 'update'],
+		'controller' => ['Folder', 'update'],
 		'method' => ['PATCH'],
-		'path' => '/storage{/{userID}?}{/{path}?}',
+		'path' => '/folder{/{userID}?}{/{path}?}',
 		'match' => ['userID' => '\d+', 'path' => '.+'],
 	],
 	[
-		'controller' => ['Storage', 'delete'],
+		'controller' => ['Folder', 'delete'],
 		'method' => ['DELETE'],
-		'path' => '/storage{/{userID}?}{/{path}?}',
+		'path' => '/folder{/{userID}?}{/{path}?}',
 		'match' => ['userID' => '\d+', 'path' => '.+'],
 	],
 

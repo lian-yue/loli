@@ -28,7 +28,6 @@ class Role extends Model{
 		'type' => ['type' => 'integer', 'length' => 1, 'key' => ['type' => 0]],
 		'include' => ['type' => 'array'],
 		'exclude' => ['type' => 'array'],
-		'exclude' => ['type' => 'array'],
 		'level' => ['type' => 'integer', 'length' => 2, 'key' => ['level' => 0]],
 		'status' => ['type' => 'integer', 'length' => 1, 'key' => ['status' => 0]],
 		'created' => ['type' => 'datetime', 'hidden' => true, 'key' => ['created' => 0]],

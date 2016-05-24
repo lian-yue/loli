@@ -4,8 +4,8 @@ return [
 
 	'' => [
 		'type' => 'File',
-		'dir' => __DIR__ . '/storage/',
-
+		'dir' => dirname(__DIR__) . '/storage/',
+        'uri' => '//s1.loli.dev',
 		// 'type' => 'Ftp',
 		// 'hostname' => '127.0.0.1',
 		// 'username' => 'username',

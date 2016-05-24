@@ -25,7 +25,7 @@ use Loli\Http\Message\Header;
 class Captcha extends Controller{
 
 	public $rules = [
-		['name' => '_captcha', 'type' => 'text', 'required' => true],
+		['name' => '_captcha', 'type' => 'text', 'required' => true, 'autocomplete' => 'off'],
 		['name' => '_captcha_id', 'type' => 'hidden', 'value' => ''],
 	];
 
@@ -59,18 +59,18 @@ class Captcha extends Controller{
 		$captchaId = $this->id($params);
 		$item = Session::getItem($captchaId);
 		if (strtoupper(trim($params['_captcha'])) !== $item->get()) {
-			throw new Message(['message' => 'validator', 'title' => Locale::translate('Captcha'), 'name' => '_captcha']);
+			throw new Message(['message' => 'validator', 'title' => Locale::translate('Captcha'), 'name' => '_captcha'], 400);
 		}
 		throw new Message('success');
 	}
 
-	public function verify(array $params) {
+	public function validator(array $params) {
 		$params = (new Validator($this->rules))->make($params, ['_captcha' => '', '_captcha_id' => ''], true);
 		$captchaId = $this->id($params);
 		$code = Session::getItem($captchaId)->get();
 		Session::deleteItem($captchaId);
 		if (strtoupper(trim($params['_captcha'])) !== $code) {
-			throw new Message(['message' => 'validator', 'title' => Locale::translate('Captcha'), 'name' => '_captcha']);
+			throw new Message(['message' => 'validator', 'title' => Locale::translate('Captcha'), 'name' => '_captcha'], 400);
 		}
 	}
 

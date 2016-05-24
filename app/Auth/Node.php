@@ -36,7 +36,7 @@ class Node extends Model{
 		if (!$slug) {
 			return false;
 		}
-		if (!$node = static::database()->query('slug', $slug, '=')->query('parent', $parent, '=')->selectRow()) {
+		if (!$node = static::database()->query('slug', $slug, '=')->query('parent', $parent, '=')->selectOne()) {
 			return false;
 		}
 		return $node;

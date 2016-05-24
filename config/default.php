@@ -12,6 +12,9 @@
 /* ************************************************************************** */
 
 return [
+    'title' => 'Title',
+
+    'description' => 'Description',
 
 	'key' => '11111111',
 
@@ -21,11 +24,6 @@ return [
 	// 白名单域名
 	'whitelist_hosts' => ['loli.dev'],
 
-
-	'assets' => [
-		'base' => '/',
-		'host' => 'assets.loli.dev',
-	],
 
 	'view' => [
 		'dir' => dirname(__DIR__) . '/resources/views/',

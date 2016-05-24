@@ -29,6 +29,6 @@ class Pelationship extends Model{
 	protected static $primaryCache = 1800;
 
 	protected static function roles($user_id) {
-		return static::database()->query('$user_id', $user_id, '=')->select();
+		return static::database()->query('user_id', $user_id, '=')->select();
 	}
 }

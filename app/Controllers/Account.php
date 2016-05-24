@@ -24,6 +24,7 @@ use App\User\Profile;
 
 
 use App\Services\Mail;
+use App\Services\Phone;
 
 use Loli\Log as Logger;
 use Loli\Uri;
@@ -43,29 +44,30 @@ use Loli\Database\QueryException;
 use Intervention\Image\ImageManagerStatic as Image;
 
 
-
-
-class Account extends Controller{
+class Account extends Controller
+{
 
 
 	public $middleware = [
 		'postLogin' => [
 			'Csrf' => [],
 			'Auth' => ['login' => false, 'node' => false],
-			'RateLimit' => ['limit' => 60, 'reset' => 900],
+			'RateLimit' => ['limit' => 60, 'reset' => 900, 'ip' => true, 'token' => true],
 		],
 
 		'postCreate' => [
 			'Csrf' => [],
 			'Auth' => ['login' => false, 'node' => false],
-			'RateLimit' => ['limit' => 60, 'reset' => 900],
-		],
-		'exists' => [
-			'Csrf' => [],
-			'RateLimit' => ['limit' => 60, 'reset' => 900],
+			'RateLimit' => ['limit' => 60, 'reset' => 900, 'ip' => true, 'token' => true],
 		],
 
-		'signOut' => [
+
+		'exists' => [
+			'Csrf' => [],
+			'RateLimit' => ['limit' => 60, 'reset' => 900, 'ip' => true, 'token' => true],
+		],
+
+		'logout' => [
 			'Csrf' => [],
 			'Auth' => ['login' => null, 'node' => false],
 		],
@@ -77,28 +79,35 @@ class Account extends Controller{
 		'sendPassword' => [
 			'Csrf' => [],
 			'Auth' => ['login' => false, 'node' => false],
-			'RateLimit' => ['limit' => 30, 'reset' => 900],
+			'RateLimit' => ['limit' => 30, 'reset' => 900, 'ip' => true, 'token' => true, ['params' => ['id' => 'intval']]],
 		],
 		'resetPassword' => [
 			'Csrf' => [],
 			'Auth' => ['login' => false, 'node' => false],
-			'RateLimit' => ['limit' => 30, 'reset' => 900],
+			'RateLimit' => ['limit' => 30, 'reset' => 900, 'ip' => true, 'token' => true, ['params' => ['id' => 'intval']]],
 		],
 		'postResetPassword' => [
 			'Csrf' => [],
 			'Auth' => ['login' => false, 'node' => false],
-			'RateLimit' => ['limit' => 30, 'reset' => 900],
+			'RateLimit' => ['limit' => 30, 'reset' => 900, 'ip' => true, 'token' => true, ['params' => ['id' => 'intval']]],
 		],
 
-		'OAuth2' => [
+
+		'oauth2' => [
 			'Csrf' => [],
 			'Auth' => ['login' => null, 'node' => false],
 			'RateLimit' => ['limit' => 120, 'reset' => 900],
 		],
 
-		'OAuth2Callback' => [
+		'oauth2Types' => [
+            'Csrf' => [],
 			'Auth' => ['login' => null, 'node' => false],
-			'RateLimit' => ['limit' => 60, 'reset' => 900],
+			'RateLimit' => ['limit' => 60, 'reset' => 900, 'ip' => true, 'token' => true],
+		],
+		'OAuth2Callback' => [
+            'Csrf' => [],
+			'Auth' => ['login' => null, 'node' => false],
+			'RateLimit' => ['limit' => 60, 'reset' => 900, 'ip' => true, 'token' => true],
 		],
 	];
 
@@ -109,28 +118,20 @@ class Account extends Controller{
 
 
 	protected $captcha = [
-		'login' => null,
-		'create' => null,
-		'lostPassword' => null,
-	];
-
-	protected $oauth2Types = [
-		'google' => 'Google',
-		'facebook' => 'Facebook',
-		'twitter' => 'Twitter',
-		'qq' => 'QQ',
-		'baidu' => 'Baidu',
-		'weibo' => 'Weibo',
+		'login' => 0,
+		'create' => 0,
+		'lostPassword' => 0,
 	];
 
 
-
-	public function index(array $params) {
+	public function index(array $params)
+    {
 		throw new Message('redirect', 302, [], new Uri(['Account', 'login']), 0);
 	}
 
-	public function login(array $params) {
-		if ($this->isCaptcha()) {
+	public function login(array $params)
+    {
+		if ($this->isCaptcha('login')) {
 			$captcha = new Captcha;
 		} else {
 			$captcha = false;
@@ -143,26 +144,29 @@ class Account extends Controller{
 
 		foreach ($rules as $key => $rule) {
 			if (isset($params[$key]) && isset($rule['value'])) {
-				$value = gettype($params[$key]);
+				$value = $params[$key];
 				settype($value, gettype($rule['value']));
 				$rules[$key]['value'] = $value;
 			}
+		}
+        $rules['password']['value'] = '';
+
+		if ($captcha) {
+			$rules += $captcha->rules;
 		}
 
 		$rules += [
 			'remember' => ['value' => 86400 * 31, 'title' => Locale::translate('Remember me'), 'type' => 'checkbox', 'checked' => !empty($params['remember'])],
 		];
 
-		if ($captcha) {
-			$rules += $captcha->rules;
-		}
 
 		$rules = User::validator()->rules($rules, true);
-		return new View(['account/login'], ['results' => $rules]);
+		return new View(['account/login'], ['results' => $rules, 'title' => [Locale::translate('Account login', ['title', 'default']), Locale::translate('title', ['title', 'default'])]]);
 	}
 
 
-	public function postLogin(array $params) {
+	public function postLogin(array $params)
+    {
 		if ($this->isCaptcha('login')) {
 			$captcha = new Captcha;
 		} else {
@@ -184,15 +188,15 @@ class Account extends Controller{
 		$params = User::validator($params, $rules, true);
 
 		// Captcha verify
-		$captcha && $captcha->verify($params);
+		$captcha && $captcha->validator($params);
 
-		$this->setIncrement();
+		$this->setIncrement('login');
 
 		$user = $this->select($column, $params);
 
 		// Password  verify
 		if (!Password::verify($params['password'], $user->password)) {
-			throw new Message(['message' => 'validator', 'title' => Locale::translate('Password'), 'name' => 'password'], 50);
+			throw new Message(['message' => 'validator', 'title' => Locale::translate('Password'), 'name' => 'password'], 400);
 		}
 
 		// login
@@ -205,7 +209,8 @@ class Account extends Controller{
 
 
 
-	public function exists(array $params) {
+	public function exists(array $params)
+    {
 		$rules = [
 			'username' => ['unique' => 'self'],
 			'email' => ['unique' => Profile::validatorQuery('email')],
@@ -215,13 +220,15 @@ class Account extends Controller{
 		throw new Message('success');
 	}
 
-	public function signOut(array $params) {
+	public function logout(array $params)
+    {
 		Route::auth()->merge(['user_id' => 0, 'expired' => null])->update();
 		throw new Message('success');
 	}
 
-	public function create(array $params) {
-		if ($this->isCaptcha()) {
+	public function create(array $params)
+    {
+		if ($this->isCaptcha('create')) {
 			$captcha = new Captcha;
 		} else {
 			$captcha = false;
@@ -229,55 +236,57 @@ class Account extends Controller{
 
 		$rules = [
 			'username' => ['value' => '', 'unique' => 'self'],
+            'nickname' => ['value' => ''],
+            'email' => ['unique' => Profile::validatorQuery('email'), 'value' => ''],
+			'phone' => ['unique' => Profile::validatorQuery('phone'), 'value' => ''],
 			'password' => ['value' => ''],
 			'password_again' => ['value' => ''],
-			'nickname' => ['value' => ''],
-			'gender' => ['value' => 2],
+			'gender' => ['value' => ''],
 			'birthday' => [],
 			'timezone' => ['value' => date_default_timezone_get(), 'option' => Locale::getTimezoneLists()],
 			'language' => ['value' => Locale::getLanguage(), 'option' => Locale::getLanguageLists()],
-			'email' => ['unique' => Profile::validatorQuery('email')],
-			// 'phone' => ['unique' => User::validatorProfileQuery('phone')],
 		];
 
 		foreach ($rules as $key => $rule) {
 			if (isset($params[$key]) && isset($rule['value'])) {
-				$value = gettype($params[$key]);
+				$value = $params[$key];
 				settype($value, gettype($rule['value']));
 				$rules[$key]['value'] = $value;
 			}
 		}
+        $rules['password']['value'] = '';
+        $rules['password_again']['value'] = '';
+
 
 		if ($captcha) {
 			$rules += $captcha->rules;
 		}
 
 		$rules = User::validator()->rules($rules, true);
-		return new View(['account/create'], ['results' => $rules]);
+		return new View(['account/create'], ['results' => $rules, 'title' => [Locale::translate('Account create', ['title', 'default']), Locale::translate('title', ['title', 'default'])]]);
 	}
 
 
-	public function postCreate(array $params) {
+	public function postCreate(array $params)
+    {
 		$rules = $this->create($params)->results;
-
-		$mimeType = ['image/png', 'image/jpeg', 'image/bmp', 'image/webp', 'image/gif'];
 		if (empty($params['avatar'])) {
 
 		} elseif ($params['avatar'] instanceof UploadedFileInterface || (is_array($params['avatar']) && reset($params['avatar']) instanceof UploadedFileInterface)) {
-			$rules['avatar'] = ['type' => 'file', 'accept' => implode(',', $mimeType), 'required' => true, 'size' => '4 MB'];
+			$rules['avatar'] = [];
 		} elseif (filter_var($params['avatar'], FILTER_VALIDATE_URL)) {
-			$rules['avatar'] = ['type' =>  'url', 'pattern' => '^https?\://([0-9a-zA-Z_-]+\.)+[a-z]+[?|/].+'];
+			$rules['avatar'] = ['type' =>  'url', 'pattern' => 'https?\://([0-9a-zA-Z_-]+\.)+[a-z]+[?|/].+'];
 		} else {
 			$rules['avatar'] = ['type' => 'text', 'value' => ''];
 		}
 
 		$params = User::validator($params, $rules, true);
 		if ($this->isCaptcha('create')) {
-			(new Captcha)->verify($params);
+			(new Captcha)->validator($params);
 		}
 		unset($params['_captcha'], $params['_captcha_id']);
 
-		$this->setIncrement();
+		$this->setIncrement('create');
 
 
 		$userParams = array_intersect_key($params, ['username' => '', 'password' => '']);
@@ -293,12 +302,13 @@ class Account extends Controller{
 		$user->registered = new DateTime('now');
 		$user->insert();
 
+
 		// Insert profile
 		foreach ($profileParams as $type => $value) {
+            if (!$value) {
+                continue;
+            }
 			if ($type === 'avatar') {
-				if (!$value) {
-					continue;
-				}
 				if (!$value = $this->getAvatar($value)) {
 					continue;
 				}
@@ -317,8 +327,9 @@ class Account extends Controller{
 
 
 
-	public function lostPassword(array $params) {
-		if ($this->isCaptcha()) {
+	public function lostPassword(array $params)
+    {
+		if ($this->isCaptcha('lostPassword')) {
 			$captcha = new Captcha;
 		} else {
 			$captcha = false;
@@ -330,7 +341,7 @@ class Account extends Controller{
 
 		foreach ($rules as $key => $rule) {
 			if (isset($params[$key]) && isset($rule['value'])) {
-				$value = gettype($params[$key]);
+				$value = $params[$key];
 				settype($value, gettype($rule['value']));
 				$rules[$key]['value'] = $value;
 			}
@@ -339,12 +350,14 @@ class Account extends Controller{
 		if ($captcha) {
 			$rules += $captcha->rules;
 		}
+
 		$rules = User::validator()->rules($rules, true);
-		return new View(['account/lostPassword'], ['results' => $rules]);
+		return new View(['account/lostPassword'], ['results' => $rules, 'title' => [Locale::translate('Account lost password', ['title', 'default']), Locale::translate('title', ['title', 'default'])]]);
 	}
 
 
-	public function selectSendPassword(array $params) {
+	public function selectSendPassword(array $params)
+    {
 		if ($this->isCaptcha('lostPassword')) {
 			$captcha = new Captcha;
 		} else {
@@ -361,157 +374,153 @@ class Account extends Controller{
 		$params = User::validator($params, $rules, true);
 
 		// Captcha
-		$captcha && $captcha->verify($params);
+		$captcha && $captcha->validator($params);
 
 		$this->setIncrement('lostPassword');
 
 		$user = $this->select($column, $params);
 		$profiles = Profile::query('deleted', null, '=')->query('user_id', $user->id, '=')->query('type', ['email', 'phone'], 'IN')->query('status', 1, '=')->select();
+        $results = [];
 		foreach ($profiles as $profile) {
 			switch ($profile->type) {
 				case 'email':
 						$value = explode('@', $profile->value, 2);
-						if (substr($value[0]) <= 3) {
+						if (strlen($value[0]) <= 3) {
 							$value[0] = '***';
-						} elseif (substr($value[0]) <= 6) {
+						} elseif (strlen($value[0]) <= 6) {
 							$value[0] = '***' . substr($value[0], -2, 2);
 						} elseif ($value[0] <= 8) {
 							$value[0] = substr($value[0], 0, 2) . '***' . substr($value[0], -2, 2);
 						} else {
 							$value[0] = substr($value[0], 0, 3) . '***' . substr($value[0], -3, 3);
 						}
-						$profile->value =  implode('@', $profile->value);
+                        if (!empty($value[1]) && strlen($value[1]) > 7) {
+                            $value[1] = '***' . substr($value[1], intval(strlen($value[1]) / 2));
+                        }
+						$value = implode('@', $value);
 					break;
 				default:
-					$profile->value = substr($profile->value, 0, 3) . '***' . substr($profile->value, -3, 3);
+					$value = substr($profile->value, 0, 3) . '***' . substr($profile->value, -3, 3);
 			}
+            $results[] = ['id' => $profile->id, 'user_id' => $profile->user_id, 'type' => $profile->type, 'value' => $value];
 		}
-
-		return new View(['account/selectSendPassword'], ['results' => $profiles]);
+		return new View(['account/selectSendPassword'], ['results' => $results, 'title' => [Locale::translate('Account select send password', ['title', 'default']), Locale::translate('title', ['title', 'default'])]]);
 	}
 
 
 
-
-	public function sendPassword(array $params) {
-		$data = ['id' => 0, 'user_id' => 0];
+	public function sendPassword(array $params)
+    {
+		$data = ['id' => 0, 'profile_id' => 0];
 		$params = array_intersect_key($params, $data) + $data;
 		$params = array_map('intval', $params);
-
-		if (!($profile = Profile::query('id', $params['id'], '=')->selectRow()) || $profile->user_id != $params['user_id'] || $profile->deleted || $profile->status != 1 || in_array($profile->type, ['email', 'phone'], true)) {
-			throw new Message(['message' => 'validator_exists',  'title' => Locale::translate('ID'), 'name' => 'id'], 50);
+		if (!($profile = Profile::selectOne($params['profile_id'])) || $profile->user_id !== $params['id'] || $profile->deleted || $profile->status !== 1 || !in_array($profile->type, ['email', 'phone'], true)) {
+			throw new Message(['message' => 'validator_exists',  'title' => Locale::translate('Profile Id'), 'name' => 'profile_id'], 400);
 		}
 
 		$user = new User(['id' => $profile->user_id]);
 		$user->select();
 
-		$created = new DateTime('now');
-		$expired = new DateTime('now');
-		$expired->modify('+15 minutes');
-
-		$code = new Code(['type' => 'password', 'code' => CryptCode::random(6, '123456789QWERTYUIPASDFGHJKLZXCVBNM'), 'user_id' => $user->id, 'args' => ['token' => Route::request()->getToken(), 'id' => $profile->id], 'created' => $created, 'expired' => $expired]);
+		$code = new Code(['type' => 'reset_password', 'user_id' => $user->id, 'value' => $profile->id]);
 		$code->insert();
+        try {
+    		switch ($profile->type) {
+    			case 'email':
+    				$mail = new Mail();
+    				$mail->addAddress($profile->value, $user->profiles['nickname']);
+    				$mail->isHTML(true);
+    				$mail->Subject = Locale::translate(['account_reset_password_email_subject', 'nickname' => $user->profiles['nickname'], 'username' => $user->username], ['service', 'default'], 'Forgot password');
+    				$mail->Body = Locale::translate(['account_reset_password_email_html', 'nickname' => $user->profiles['nickname'], 'username' => $user->username, 'code' => $code->code], ['service', 'default'], '<p>Hello {nickname}. </p><p>Your verification code is ({code}). </p><p>It used to retrieve your password. </p>');
+    				$mail->AltBody = Locale::translate(['account_reset_password_email_text', 'nickname' => $user->profiles['nickname'], 'username' => $user->username, 'code' => $code->code], ['service', 'default'], "Hello {nickname}. \r\nYour verification code is ({code}). \r\nIt used to retrieve your password. ");
+    				$mail->send();
+    				break;
+    			case 'phone':
+                    $text = Locale::translate(['account_reset_password_sms_text', 'nickname' => $user->profiles['nickname'], 'username' => $user->username], ['service', 'default'], "Hello {nickname}. \r\nYour verification code is ({code}). \r\nIt used to retrieve your password. ");
+        			Phone::sms($profile->value, $text);
 
-		switch ($profile->type) {
-			case 'email':
-				try {
-					$mail = new Mail();
-					$mail->addAddress($profile->value, $user->nickname);
-					$mail->isHTML(true);
-					$mail->Subject = Locale::translate(['account_password_subject', 'nickname' => $user->nickname, 'username' => $user->username], ['mail', 'default'], 'Authentication Code');
-					$mail->Body = Locale::translate(['account_password_body_html', 'nickname' => $user->nickname, 'username' => $user->username, 'code' => $code->code], ['mail', 'default'], 'Authentication Code');
-					$mail->AltBody = Locale::translate(['account_password_body_text', 'nickname' => $user->nickname, 'username' => $user->username, 'code' => $code->code], ['mail', 'default'], 'Authentication Code');
-					$mail->send();
-				} catch (\Exception $e) {
-					Logger::controller()->error($e->getMessage(), ['exception' => $e, 'address' => $profile->value]);
-					throw new Message(['message' => 'exception', 'value' => $e->getMessage(), 'code' => $e->getCode()], 500);
-				}
-				break;
-			case 'phone':
-				try {
-					$sms = new SMS($profile->value);
-					$sms->send();
-				} catch (\Exception $e) {
-					Logger::controller()->error($e->getMessage(), ['exception' => $e, 'phone' => $profile->value]);
-					throw new Message(['message' => 'exception', 'value' => $e->getMessage(), 'code' => $e->getCode()], 500);
-				}
-				break;
-		}
+    		}
+        } catch (\Exception $e) {
+            Logger::controller()->error($e->getMessage(), ['exception' => $e, 'value' => $profile->value]);
+            throw new Message(['message' => 'exception', 'value' => $e->getMessage(), 'code' => $e->getCode()], 500);
+        }
 		throw new Message('success', 200, ['results' => [$code]]);
 	}
 
 
-	public function resetPassword(array $params) {
+	public function resetPassword(array $params)
+    {
 		$rules = [
-			'id' => ['value' => 0, 'unique' => 'self'],
+			'id' => ['value' => 0, 'exists' => 'self'],
 			'code' => ['value' => '', 'type' => 'hidden', 'required' => true],
 		];
 		$params = array_map('trim', array_map('to_string', $params));
 
-		User::validator($params, $rules, true);
+        try {
+            $params = User::validator($params, $rules, true);
 
-		$now = new DateTime('now');
-		$user = new User(['id' => $params['id']]);
-		$user->select();
+            $user = new User(['id' => $params['id']]);
 
-		foreach (Code::query('user_id', $user->id, '=')->query('type', 'password', '=')->query('deleted', null, '=')->order('expired', 'DESC')->limit(10)->select() as $value) {
-			if (empty($value->args['token']) || $value->args['token'] !== Route::request()->getToken()) {
-				continue;
-			}
-			if ($value->expired < $now) {
-				continue;
-			}
-			if (strtoupper($value->code) !== $params['code']) {
-				continue;
-			}
-			$break = true;
-			break;
-		}
-		if (empty($break)) {
-			throw new Message(['message' => 'validator', 'title' => Locale::translate('Code'), 'name' => 'code'], 50);
-		}
+            $user->select();
 
-		return new View(['account/resetPassword'], ['results' => [$user]]);
+            Code::verify('reset_password', $params['code'], $user->id);
+        } catch (Message $e) {
+            $e->setRedirectUri(new Uri(['Home', 'index']));
+            throw $e;
+        }
+
+        $rules = [
+            ['name' => 'nickname', 'type' => 'text', 'value' => $user->profiles['nickname'], 'disabled' => true],
+            ['name' => 'new_password'],
+            ['name' => 'new_password_again'],
+            ['name' => 'id', 'type' => 'hidden', 'value' => $user->id],
+            ['name' => 'code', 'type' => 'hidden', 'value' => $params['code']],
+        ];
+
+        $rules = User::validator()->rules($rules, true);
+
+
+		return new View(['account/resetPassword'], ['results' => $rules, 'title' => [Locale::translate('Account reset password', ['title', 'default']), Locale::translate('title', ['title', 'default'])]]);
 	}
 
 
-
-
-	public function postResetPassword(array $params) {
-		$user = $this->resetPassword($params)->results[0];
+	public function postResetPassword(array $params)
+    {
+		$user = User::selectOne($this->resetPassword($params)->results['id']['value']);
 
 		$rules = [
-			'password' => ['value' => ''],
-			'password_again' => ['value' => ''],
+			'new_password' => ['value' => ''],
+			'new_password_again' => ['value' => ''],
 		];
 		$params = array_map('trim', array_map('to_string', $params));
 		$params = User::validator($params, $rules, true);
 
 		// Update password
 		$password = $user->password;
-		$user->password = $params['password'];
+		$user->password = $params['new_password'];
 		$user->update();
 
 		$log = new Log(['user_id' => $user->id, 'type' => 'reset_password', 'value' => $password]);
 		$log->insert();
 
 		// Update code delete
-		Code::query('user_id', $user->id, '=')->query('type', 'password', '=')->query('deleted', null, '=')->value('deleted', $now)->update();
+		Code::query('user_id', $user->id, '=')->query('token', Route::token()->get(), '=')->query('type', 'reset_password', '=')->query('deleted', null, '=')->value('deleted', new DateTime('now'))->update();
 
-		throw new Message('success');
+        // 首页重定向
+		throw new Message('success', 200, [], new Uri(['Account', 'login'], ['account' => $user->username]));
 	}
 
 
 
-	public function captcha(array $params) {
+	public function captcha(array $params)
+    {
 		throw new Message('success', 200, ['captcha' => $this->isCaptcha(empty($params['method']) ? 'login' : (string) $params['method'], empty($params['id']) ? 0 : intval($params['id'])) ? new Uri(['Captcha', 'index']) : false]);
 	}
 
 
 
-
 	// 重定向到登陆页面
-	public function oauth2(array $params) {
+	public function oauth2(array $params)
+    {
 		$class = $this->getOAuth2Class($params);
 		$item = Session::getItem('oauth2_' . $class->getType());
 		$params = to_array($params);
@@ -521,7 +530,52 @@ class Account extends Controller{
 	}
 
 
-	public function oauth2Callback(array $params) {
+    public function oauth2Types(array $params = [])
+    {
+        $params = array_intersect_key($params , ['redirect_uri' => '', 'create' => '']);
+        $params['_csrf'] = Route::token()->get();
+		$types = [
+            'google' => [
+                'uri' => new Uri(['Account', 'oauth2'], array_merge(['type' => 'google'], $params)),
+                'name' => Locale::translate('Google'),
+                'class' => 'Google',
+            ],
+            'facebook' => [
+                'uri' => new Uri(['Account', 'oauth2'], array_merge(['type' => 'facebook'], $params)),
+                'name' => Locale::translate('Facebook'),
+                'class' => 'Facebook',
+            ],
+            'twitter' => [
+                'uri' => new Uri(['Account', 'oauth2'], array_merge(['type' => 'twitter'], $params)),
+                'name' => Locale::translate('Twitter'),
+                'class' => 'Twitter',
+            ],
+            'qq' => [
+                'uri' => new Uri(['Account', 'oauth2'], array_merge(['type' => 'qq'], $params)),
+                'name' => Locale::translate('QQ'),
+                'class' => 'QQ',
+            ],
+            'baidu' => [
+                'uri' => new Uri(['Account', 'oauth2'], array_merge(['type' => 'baidu'], $params)),
+                'name' => Locale::translate('Baidu'),
+                'class' => 'Baidu',
+            ],
+            'weibo' => [
+                'uri' => new Uri(['Account', 'oauth2'], array_merge(['type' => 'weibo'], $params)),
+                'name' => Locale::translate('Weibo'),
+                'class' => 'Weibo',
+            ],
+            // 'wechat' => [
+            //     'uri' => new Uri(['Account', 'oauth2'], ['type' => 'wechat', '_csrf' => Route::token()->get()]),
+            //     'name' => Locale::translate('WeChat'),
+            //     'class' => 'WeChat',
+            // ],
+        ];
+        return new View(['account/oauth2Types'], ['results' => $types, 'title' => [Locale::translate('Account oauth2', ['title', 'default']), Locale::translate('title', ['title', 'default'])]]);
+    }
+
+	public function oauth2Callback(array $params)
+    {
 		$class = $this->getOAuth2Class($params);
 
 		// 附加参数
@@ -571,14 +625,13 @@ class Account extends Controller{
 		if ($userId = Route::auth()->user_id) {
 
 			// 有绑定了
-			if (Profile::query('deleted', null, '=')->query('type', $type, '=')->query('status', 1, '=')->query('value', $userInfo['id'])->selectRow()) {
-				throw new Message(['message' => 'oauth2_unique', 'name' => ($class->getName())], 80);
+			if (Profile::query('deleted', null, '=')->query('type', $type, '=')->query('status', 1, '=')->query('value', $userInfo['id'])->selectOne()) {
+				throw new Message(['message' => 'oauth2_unique', 'name' => ($class->getName())], 403);
 			}
 
-			// 数量太多了
-			$profiles = Profile::query('deleted', null, '=')->query('type', $type, '=')->query('status', 1, '=')->query('value', $userInfo['id'])->limit(11)->select();
-			if ($profiles->count() > 10) {
-				throw new Message(['message' => 'oauth2_max_count', 'name' => ($class->getName())], 80);
+			// 已经存在了
+			if (Profile::query('deleted', null, '=')->query('type', $type, '=')->query('status', 1, '=')->query('value', $userInfo['id'])->selectOne()) {
+				throw new Message(['message' => 'oauth2_exists', 'name' => ($class->getName())], 403);
 			}
 
 			// 插入
@@ -591,7 +644,7 @@ class Account extends Controller{
 
 
 		// 已存在登陆
-		if ($profile = Profile::query('deleted', null, '=')->query('type', $type, '=')->query('status', 1, '=')->query('value', $userInfo['id'])->selectRow()) {
+		if ($profile = Profile::query('deleted', null, '=')->query('type', $type, '=')->query('status', 1, '=')->query('value', $userInfo['id'])->selectOne()) {
 			// 更新字段
 			$profile->args = ['user_info' => $userInfo, 'access_token' => $accessToken];
 			$profile->update();
@@ -600,7 +653,7 @@ class Account extends Controller{
 			$user = Route::user();
 			$user->id = $profile->user_id;
 			$user->select();
-			$this->loginAuth($user, 86400 * 7, implode(',', 'OAuth2-' . $profile->id));
+			$this->loginAuth($user, 86400 * 7, 'OAuth2-' . $profile->id);
 
 			throw new Message('redirect', 302, [], $redirectUri, 0);
 		}
@@ -622,13 +675,13 @@ class Account extends Controller{
 			}
 
 			// 唯一用户名
-			if (User::query('username', $username, '=')->selectRow()) {
+			if (User::query('username', $username, '=')->selectOne()) {
 				$username = $profile->getType() . '_' . $username;
 				$username = mb_substr($username, 0, 32);
-				if (User::query('username', $username, '=')->selectRow()) {
+				if (User::query('username', $username, '=')->selectOne()) {
 					$random = '_' . CryptCode::random(5, '0123456789qwertyuiopafghklzxcvbnm');
 					$username = mb_substr($username, 0, 32 - mb_strlen($random));
-					if (User::query('username', $username, '=')->selectRow()) {
+					if (User::query('username', $username, '=')->selectOne()) {
 						throw new \RuntimeException('User name already exists');
 					}
 				}
@@ -648,7 +701,7 @@ class Account extends Controller{
 			$oauth2Profile->insert();
 
 			//  自动注册设置字段
-			$profile = new Profile(['user_id' => $user->id, 'type' => 'oauth2_create',  'value' => 1, 'status' => 1]);
+			$profile = new Profile(['user_id' => $user->id, 'type' => 'create',  'value' => 'oauth2', 'status' => 1]);
 			$profile->insert();
 
 
@@ -685,9 +738,7 @@ class Account extends Controller{
 						if (empty($rules[$key]['examine'])) {
 							$status = 1;
 						} elseif (in_array($key, ['email', 'phone'], true)) {
-							if (empty($userInfo['verified_' . $key])) {
-								$status = 0;
-							} elseif (Profile::query('deleted', null, '=')->query('type', $key, '=')->query('status', 1, '=')->query('value', $value, '=')->selectRow()) {
+							if (empty($userInfo['verified_' . $key]) || Profile::query('type', $key, '=')->query('status', 1, '=')->query('value', $value, '=')->selectOne()) {
 								$status = 0;
 							} else {
 								$status = 1;
@@ -726,7 +777,8 @@ class Account extends Controller{
 	}
 
 
-	protected function getAvatar($value) {
+	protected function getAvatar($value)
+    {
 		try {
 			if ($value instanceof UploadedFileInterface) {
 				$image = Image::make($value->getStream()->getContents());
@@ -754,7 +806,8 @@ class Account extends Controller{
 	}
 
 
-	protected function getUserRule(array &$params) {
+	protected function getUserRule(array &$params)
+    {
 		if (isset($params['id'])) {
 			$rules['id'] = ['value' => 0, 'exists' => 'self'];
 		} elseif (isset($params['username'])) {
@@ -773,7 +826,7 @@ class Account extends Controller{
 			}
 			$params[key($rules)] = $params['account'];
 		} else {
-			throw new Message(['message' => 'validator_required', 'title' => Locale::translate('Account'), 'name' => 'account'], 50);
+			throw new Message(['message' => 'validator_required', 'title' => Locale::translate('Account'), 'name' => 'account'], 400);
 		}
 		return $rules;
 	}
@@ -781,28 +834,31 @@ class Account extends Controller{
 
 
 
-	protected function select($column, &$params) {
+	protected function select($column, &$params)
+    {
 		if (in_array($column, ['email', 'phone'], true)) {
-			if (!$profile = Profile::query('deleted', null, '=')->query('type', $column, '=')->query('status', 1, '=')->query('value', $params[$column], '=')->selectRow()) {
+			if (!$profile = Profile::query('deleted', null, '=')->query('type', $column, '=')->query('status', 1, '=')->query('value', $params[$column], '=')->selectOne()) {
 				throw new QueryException(__METHOD__  . '()', $params);
 			}
 			$user = new User(['id' => $profile->user_id]);
 			$user->select();
-		} elseif (!$user = User::query($column, $params[$column], '=')->selectRow()) {
+		} elseif (!$user = User::query($column, $params[$column], '=')->selectOne()) {
 			throw new QueryException(__METHOD__  . '()', $params);
 		}
 		return $user;
 	}
 
 
-	protected function isCaptcha($method  = __FUNCTION__, $id = 0) {
+	protected function isCaptcha($method, $id = 0)
+    {
 		if (isset($this->captcha[$method]) && (empty($this->captcha[$method]) || $this->getIncrement($method) > $this->captcha[$method] || ($id && $this->getIncrement($method .'-'. $id) > $this->captcha[$method]))) {
 			return true;
 		}
 		return false;
 	}
 
-	protected function loginAuth(User $user, $remember = 0, $value = '') {
+	protected function loginAuth(User $user, $remember = 0, $value = '')
+    {
 		if (!$remember) {
 			$remember = 86400 * 2;
 		} elseif ($remember < 3600) {
@@ -828,7 +884,8 @@ class Account extends Controller{
 	}
 
 
-	protected function getIncrement($type = __FUNCTION__) {
+	protected function getIncrement($type)
+    {
 		$cache = Cache::controller();
 		$items = $cache->getItems([Route::ip(), Route::token()->get()]);
 		$count = 0;
@@ -841,7 +898,8 @@ class Account extends Controller{
 	}
 
 
-	protected function setIncrement($type = __FUNCTION__) {
+	protected function setIncrement($type)
+    {
 		$cache = Cache::controller();
 		$items = $cache->getItems([Route::ip(), Route::token()->get()]);
 		foreach($items as $item) {
@@ -858,12 +916,13 @@ class Account extends Controller{
 	}
 
 
-
-	protected function getOAuth2Class(array &$params) {
-		if (empty($params['type']) || !is_string($params['type']) || empty($this->oauth2Types[$params['type']])) {
-			throw new Message(['message' => 'validator_exists', 'title' => Locale::translate('Type'), 'name' => 'type'], 50);
+	protected function getOAuth2Class(array &$params)
+    {
+        $results = $this->oauth2Types()->results;
+		if (empty($params['type']) || !is_string($params['type']) || empty($results[$params['type']])) {
+			throw new Message(['message' => 'validator_exists', 'title' => Locale::translate('Type'), 'name' => 'type'], 400);
 		}
-		$class = 'App\OAuth2\\' . $this->oauth2Types[$params['type']];
+		$class = 'App\OAuth2\\' . $results[$params['type']]['class'];
 		return new $class($params);
 	}
 }

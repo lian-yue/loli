@@ -38,8 +38,6 @@ class Profile extends Model{
 		'phone' => 10,
 	];
 
-
-
 	public function insert() {
 		if (!$this->created) {
 			$this->created = new DateTime('now');
@@ -52,13 +50,14 @@ class Profile extends Model{
 				$user->profiles = [$this->type => $this->value] + $user->profiles;
 				$user->update();
 			}
-			if (substr($this->type, 0, 7) !== 'oauth2_' && (empty(static::$multiple[$this->type]) || static::$multiple[$this->type] === 1)) {
+			if (empty(static::$multiple[$this->type]) || static::$multiple[$this->type] === 1) {
 				static::database()->query('deleted', null, '=')->query('id', $this->id, '!=')->query('user_id', $this->user_id)->query('type', $this->type, '=')->value('deleted', new DateTime('now'))->update();
 			}
 		}
 		return $insert;
 	}
+
 	public static function validatorQuery($column, $status = 1) {
-		return 'User/Profile|value|{"type": "'.$column.'", "status":'. $status .', "deleted": null}';
+		return 'User/Profile|value|' . json_encode(['deleted' => null, 'type' => $column, 'status' => $status]);
 	}
 }
